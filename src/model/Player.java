@@ -1,10 +1,9 @@
 package model;
 
 import java.awt.Dimension;
-import java.awt.Point;
+
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class Player extends SpaceObject {
 	String name;

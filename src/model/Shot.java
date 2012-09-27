@@ -1,7 +1,7 @@
 package model;
 
 import java.awt.Dimension;
-import java.awt.Point;
+
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -33,6 +33,10 @@ public class Shot extends SpaceObject {
 		if (!this.getBorders(resolution).contains(true)) {
 			movePhysicallyCorrect(resolution, objects);
 		}
+	}
+	
+	public boolean shouldBeDeletedIfOverlaps(SpaceObject object){
+		return true;		
 	}
 
 }

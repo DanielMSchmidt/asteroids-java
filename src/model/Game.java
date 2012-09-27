@@ -21,8 +21,6 @@ public class Game {
 		this.level = 0;
 		this.score = 0;
 	}
-
-	//FIXME: Shots which overlapp should only delete the latest shot (with highest distance from player)
 	
 	public void run(int deltaAlignment, boolean forward, boolean shoot) {
 		handleUserInput(deltaAlignment, forward, shoot);
@@ -67,7 +65,8 @@ public class Game {
 
 	private void deleteOverlappingObjects(SpaceObject object, ArrayList<SpaceObject> overlapingObjects) {
 		ArrayList<SpaceObject> toBeDeleted = new ArrayList<SpaceObject>();
-
+		
+		//FIXME Fix overlapping shots which kill each other here by mutating the list
 		for (SpaceObject overlapingObject : overlapingObjects) {
 			toBeDeleted.addAll(handleDeletion(object, overlapingObject));
 		}

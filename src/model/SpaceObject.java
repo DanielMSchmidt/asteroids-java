@@ -1,7 +1,7 @@
 package model;
 
 import java.awt.Dimension;
-import java.awt.Point;
+
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -79,8 +79,8 @@ public abstract class SpaceObject {
 	}
 
 	public SpaceObject bounce(SpaceObject object) {
-		Point a = (Point) this.getDirection().clone();
-		this.setDirection((Point) object.getDirection().clone());
+		Point2D a = (Point2D) this.getDirection().clone();
+		this.setDirection((Point2D) object.getDirection().clone());
 		object.setDirection(a);
 
 		return this;
@@ -137,7 +137,6 @@ public abstract class SpaceObject {
 	}
 
 	protected static Point2D transformVektorViaAngle(Point2D direction, int angle) {
-		// FIXME Doesn't seem to work
 		double theta = Math.toRadians(angle);
 		double x = (double) direction.getX() * Math.cos(theta)
 		        - (double) direction.getY() * Math.sin(theta);
@@ -160,7 +159,7 @@ public abstract class SpaceObject {
 		return direction;
 	}
 
-	public SpaceObject setDirection(Point direction) {
+	public SpaceObject setDirection(Point2D direction) {
 		this.direction = direction;
 		return this;
 	}

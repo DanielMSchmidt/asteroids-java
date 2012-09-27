@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -32,9 +31,9 @@ public class Asteroid extends SpaceObject {
 	public void move(Dimension resolution, ArrayList<SpaceObject> objects) {
 		movePhysicallyCorrect(resolution, objects);
 	}
-	
+
 	public boolean shouldBeDeletedIfOverlaps (SpaceObject object){
-		return (!(object.getClass() == Asteroid.class));		
+		return (!(object.getClass() == Asteroid.class));
 	}
 
 }
