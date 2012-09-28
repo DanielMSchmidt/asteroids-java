@@ -33,7 +33,7 @@ public class Game extends GUI {
 		add(paintArea);
 
 		int shipAlignment = 0;
-
+		// FIXME Player isn't centered i guess (hold space and turn)
 		// TODO Nicer code maybe?
 		URL bildURL = getClass().getResource("/view/spaceship.png");
 		try {
@@ -108,7 +108,7 @@ public class Game extends GUI {
 	}
 
 	public static BufferedImage rotate(BufferedImage img, int alignment) {
-		//FIXME Shot should rotate too
+		// FIXME Shot should rotate too
 		int w = img.getWidth();
 		int h = img.getHeight();
 

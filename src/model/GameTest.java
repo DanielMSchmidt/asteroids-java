@@ -122,13 +122,12 @@ public class GameTest {
 	@Test
 	public void test_that_run_moves_the_objects() {
 		game.objects = new ArrayList<SpaceObject>();
-		Point2D oldPlace = new Point2D.Double(100, 100);
-		game.objects.add(new Asteroid((Point2D) oldPlace.clone(), 10, new Point2D.Double(10, 10)));
+		game.objects.add(new Asteroid(new Point2D.Double(100, 100), 10, new Point2D.Double(10, 10)));
 
 		game.run(0, false, false);
 
-		assertNotSame(oldPlace.getX(), game.objects.get(0).getPosition().getX());
-		assertNotSame(oldPlace.getY(), game.objects.get(0).getPosition().getY());
+		assertNotSame(100, game.objects.get(0).getPosition().getX());
+		assertNotSame(100, game.objects.get(0).getPosition().getY());
 	}
 
 	@Test

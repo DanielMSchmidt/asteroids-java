@@ -22,7 +22,6 @@ public class Game {
 		this.score = 0;
 	}
 
-	// FIXME Fix that the spaceobject doesn't move
 	public void run(int deltaAlignment, boolean forward, boolean shoot) {
 		handleUserInput(deltaAlignment, forward, shoot);
 
@@ -92,8 +91,7 @@ public class Game {
 	}
 
 	public void nextLevel() {
-		this.level++;
-		setLevel(this.level);
+		setLevel(this.level + 1);
 	}
 
 	public void setLevel(int level) {
