@@ -3,8 +3,10 @@ package view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyListener;
+import java.awt.geom.Point2D;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import model.Printable;
+import model.SpaceObject;
 
 public class Game extends GUI {
 	BufferedImage spaceshipImg;
@@ -32,7 +35,6 @@ public class Game extends GUI {
 		paintArea.setLayout(null);
 		add(paintArea);
 
-		int shipAlignment = 0;
 		// FIXME Player isn't centered i guess (hold space and turn)
 		// TODO Nicer code maybe?
 		URL bildURL = getClass().getResource("/view/spaceship.png");
@@ -80,27 +82,23 @@ public class Game extends GUI {
 			e.printStackTrace();
 		}
 		for (Printable item : list) {
+			Point position = new Point((int) item.getPosition().getX() - (int) item.getSize(), (int) item.getPosition().getY() - (int) item.getSize());
 			if (picture != null) {
 				Graphics2D g = picture.createGraphics();
 				if (item.getType() == "player") {
-					// TODO Fix alignment errors
-					spaceshipMovesImg = rotate(spaceshipMovesImg, shipAlignment - item.getAlignment());
-					spaceshipImg = rotate(spaceshipImg, shipAlignment - item.getAlignment());
+
 					shipAlignment = item.getAlignment();
-					// TODO extract Method
 					if (moving) {
-						g.drawImage(spaceshipMovesImg, (int) item.getPosition().getX() - (int) item.getSize(),
-						        (int) item.getPosition().getY() - (int) item.getSize(), this);
+						g.drawImage(rotate(spaceshipMovesImg, -shipAlignment), position.x, position.y, this);
 					} else {
-						g.drawImage(spaceshipImg, (int) item.getPosition().getX() - (int) item.getSize(), (int) item
-						        .getPosition().getY() - (int) item.getSize(), this);
+						g.drawImage(rotate(spaceshipImg, -shipAlignment), position.x, position.y, this);
 					}
 				} else if (item.getType() == "asteroid") {
-					g.drawImage(asteroidImg, (int) item.getPosition().getX() - (int) item.getSize(), (int) item
-					        .getPosition().getY() - (int) item.getSize(), this);
+					g.drawImage(asteroidImg, position.x, position.y, this);
 				} else {
-					g.drawImage(shotImg, (int) item.getPosition().getX() - (int) item.getSize(), (int) item
-					        .getPosition().getY() - (int) item.getSize() - 30, this);
+					//30 has to be transformed
+					Point2D additionalSize = SpaceObject.transformVektorViaAngle(new Point(0, -30), shipAlignment);
+					g.drawImage(rotate(shotImg, -shipAlignment), position.x + (int) additionalSize.getX(), position.y + (int) additionalSize.getY(), this);
 				}
 			}
 			paintArea.repaint();

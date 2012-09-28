@@ -36,7 +36,6 @@ public class Player extends SpaceObject {
 	}
 
 	public void setAlignment(int i) {
-		//TODO Maybe inline newAlignment?
 		int formerAlignment = this.alignment;
 		
 		int newAlignment = (i % 360);

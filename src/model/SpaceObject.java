@@ -136,7 +136,7 @@ public abstract class SpaceObject {
 		}
 	}
 
-	protected static Point2D transformVektorViaAngle(Point2D direction, int angle) {
+	public static Point2D transformVektorViaAngle(Point2D direction, int angle) {
 		double theta = Math.toRadians(angle);
 		double x = (double) direction.getX() * Math.cos(theta)
 		        - (double) direction.getY() * Math.sin(theta);

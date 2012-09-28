@@ -47,7 +47,6 @@ public class Game {
 
 	}
 
-	// TODO Getter and setter for objects which clones them allready?
 	public ArrayList<SpaceObject> handleObjects(ArrayList<SpaceObject> objects) {
 		if (objects.size() <= 0) return objects;
 
