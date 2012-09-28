@@ -34,9 +34,15 @@ public class Shot extends SpaceObject {
 			movePhysicallyCorrect(resolution, objects);
 		}
 	}
-	
-	public boolean shouldBeDeletedIfOverlaps(SpaceObject object){
-		return true;		
-	}
+
+	@Override
+    public boolean shouldBeDeletedIfOverlaps(ArrayList<SpaceObject> overlappingObjects) {
+		return classIsInList("model.Asteroid", overlappingObjects) || classIsInList("model.Shot", overlappingObjects);
+    }
+
+	@Override
+    public boolean shouldBeDeletedAsItCrashsWithWall(Dimension resolution) {
+		return this.getBorders(resolution).contains(true);
+    }
 
 }

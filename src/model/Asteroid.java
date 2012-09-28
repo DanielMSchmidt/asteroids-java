@@ -18,8 +18,7 @@ public class Asteroid extends SpaceObject {
 
 	public int getPoints() {
 		int normalSize = 30;
-		int speedPoints = (int) Math.round((Math.abs(this.direction.getX()) + Math
-				.abs(this.direction.getY())) / 5);
+		int speedPoints = (int) Math.round((Math.abs(this.direction.getX()) + Math.abs(this.direction.getY())) / 5);
 		int sizePoints = Math.round(Math.abs(normalSize - this.size) / 10);
 		return speedPoints + sizePoints + 1;
 	}
@@ -32,8 +31,14 @@ public class Asteroid extends SpaceObject {
 		movePhysicallyCorrect(resolution, objects);
 	}
 
-	public boolean shouldBeDeletedIfOverlaps (SpaceObject object){
-		return (!(object.getClass() == Asteroid.class));
+	public boolean shouldBeDeletedIfOverlaps(ArrayList<SpaceObject> overlappingObjects) {
+		return classIsInList("model.Shot", overlappingObjects);
 	}
+
+	public boolean shouldBeDeletedAsItCrashsWithWall(Dimension resolution) {
+		return false;
+	}
+
+
 
 }

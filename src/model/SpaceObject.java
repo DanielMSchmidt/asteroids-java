@@ -163,12 +163,33 @@ public abstract class SpaceObject {
 		this.direction = direction;
 		return this;
 	}
+	
+	protected boolean classIsInList(String lethalClass, ArrayList<SpaceObject> overlappingObjects) {
+		for (SpaceObject object : overlappingObjects){
+			if (object.getClass().getName() == lethalClass)
+				return true;
+		}
+	    return false;
+    }
 
 	public abstract Printable getPrintable();
 
 	public abstract int getPoints();
 
-	public boolean shouldBeDeletedIfOverlaps(SpaceObject object) {
-		return true;
-	}
+	public abstract boolean shouldBeDeletedIfOverlaps(ArrayList<SpaceObject> overlappingObjects);
+
+	public abstract boolean shouldBeDeletedAsItCrashsWithWall(Dimension resolution);
+
+	public ArrayList<SpaceObject> shouldBeBothDeletedIfOverlaps(ArrayList<SpaceObject> thisOverlappingObjects) {
+		return this.deleteSameClassAsObject(thisOverlappingObjects);
+    }
+	
+	private ArrayList<SpaceObject> deleteSameClassAsObject(ArrayList<SpaceObject> objects) {
+		ArrayList<SpaceObject> newArrayList = new ArrayList<SpaceObject>();
+		for (SpaceObject object : objects){
+			if (this.getClass() != object.getClass()) newArrayList.add(object); 
+		}
+	    return newArrayList;
+    }
+
 }

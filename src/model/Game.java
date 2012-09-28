@@ -21,15 +21,18 @@ public class Game {
 		this.level = 0;
 		this.score = 0;
 	}
-	
+
+	// FIXME Fix that the spaceobject doesn't move
 	public void run(int deltaAlignment, boolean forward, boolean shoot) {
 		handleUserInput(deltaAlignment, forward, shoot);
 
 		moveSpaceObjects();
-		handleOverlappingSpaceObjects();
+		if (player.shouldBeDeletedIfOverlaps(player.overlapingObjects(this.objects))) {
+			throw new GameOverException(this.score);
+		}
+		this.objects = handleObjects(this.objects);
 
 		if (getAsteroidCount() == 0) nextLevel();
-		if (player.overlapingObjects(this.objects).size() > 0) throw new GameOverException(this.score);
 	}
 
 	private void handleUserInput(int deltaAlignment, boolean forward, boolean shoot) {
@@ -45,81 +48,41 @@ public class Game {
 
 	}
 
-	private void handleOverlappingSpaceObjects() {
-		for (SpaceObject object : this.objects) {
-			handleOverlapingObjects(object);
-		}
-	}
+	// TODO Getter and setter for objects which clones them allready?
+	public ArrayList<SpaceObject> handleObjects(ArrayList<SpaceObject> objects) {
+		if (objects.size() <= 0) return objects;
 
-	private void handleOverlapingObjects(SpaceObject object) {
-		ArrayList<SpaceObject> overlapingObjects = object.overlapingObjects(this.objects);
+		SpaceObject thisObject = objects.get(0);
+		ArrayList<SpaceObject> remainingObjects = getRestOfList(objects);
+		ArrayList<SpaceObject> thisOverlappingObjects = thisObject.overlapingObjects(objects);
 
-		if (overlapingObjects.size() > 0) {
-			deleteOverlappingObjects(object, overlapingObjects);
-		}
+		if (thisObject.shouldBeDeletedIfOverlaps(thisOverlappingObjects)) {
 
-		if (object.getClass() == Shot.class && object.getBorders(resolution).contains(true)) {
-			this.objects = getRemainingObjects(object);
-		}
-	}
+			for (SpaceObject overlappingObject : thisObject.shouldBeBothDeletedIfOverlaps(thisOverlappingObjects)) {
+				this.score += overlappingObject.getPoints();
+				remainingObjects.remove(overlappingObject);
+			}
 
-	private void deleteOverlappingObjects(SpaceObject object, ArrayList<SpaceObject> overlapingObjects) {
-		ArrayList<SpaceObject> toBeDeleted = new ArrayList<SpaceObject>();
-		
-		//FIXME Fix overlapping shots which kill each other here by mutating the list
-		for (SpaceObject overlapingObject : overlapingObjects) {
-			toBeDeleted.addAll(handleDeletion(object, overlapingObject));
-		}
+			this.score += thisObject.getPoints();
+			return handleObjects(remainingObjects);
 
-		if (!toBeDeleted.isEmpty()) this.objects = getRemainingObjects(toBeDeleted);
-	}
-
-	private ArrayList<SpaceObject> handleDeletion(SpaceObject object, SpaceObject overlapingObject) {
-
-		if (object.shouldBeDeletedIfOverlaps(overlapingObject)) {
-			ArrayList<SpaceObject> delete = new ArrayList<SpaceObject>();
-
-			this.score += object.getPoints() + overlapingObject.getPoints();
-			delete.add(object);
-			delete.add(overlapingObject);
-
-			return delete;
+		} else if (thisObject.shouldBeDeletedAsItCrashsWithWall(this.resolution)) {
+			return handleObjects(remainingObjects);
 		} else {
-			return new ArrayList<SpaceObject>();
+			remainingObjects = handleObjects(remainingObjects);
+			remainingObjects.add(thisObject);
+			return remainingObjects;
 		}
 	}
 
-	private ArrayList<SpaceObject> getRemainingObjects(SpaceObject deleteIt) {
-		ArrayList<SpaceObject> list = new ArrayList<SpaceObject>();
+	private ArrayList<SpaceObject> getRestOfList(ArrayList<SpaceObject> list) {
+		if (list.size() <= 1) return new ArrayList<SpaceObject>();
 
-		for (SpaceObject object : this.objects) {
-			if (deleteIt != object) list.add(object);
+		ArrayList<SpaceObject> output = new ArrayList<SpaceObject>();
+		for (int i = 1; i < list.size(); i++) {
+			output.add(list.get(i));
 		}
-
-		return list;
-	}
-
-	private ArrayList<SpaceObject> getRemainingObjects(ArrayList<SpaceObject> toBeDeleted) {
-		ArrayList<SpaceObject> remainingObjects = new ArrayList<SpaceObject>();
-		for (SpaceObject object : this.objects) {
-			if (shouldNotBeDeleted(object, toBeDeleted)) {
-				remainingObjects.add(object);
-			}
-		}
-		return remainingObjects;
-	}
-
-	private boolean shouldNotBeDeleted(SpaceObject object, ArrayList<SpaceObject> toBeDeleted) {
-
-		boolean deleteIt = true;
-
-		for (SpaceObject toDelete : toBeDeleted) {
-			if (object == toDelete) {
-				deleteIt = false;
-			}
-		}
-
-		return deleteIt;
+		return output;
 	}
 
 	private void moveSpaceObjects() {

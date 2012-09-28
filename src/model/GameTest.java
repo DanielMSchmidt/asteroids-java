@@ -418,10 +418,27 @@ public class GameTest {
 	public void test_that_run_with_shot_generates_a_shot() {
 		game.run(0, false, false);
 		int oldObjectsCount = game.objects.size();
+		game.objects.get(0).position = new Point2D.Double(100, 100);
+		game.objects.get(1).position = new Point2D.Double(500, 500);
+		game.player.position = new Point2D.Double(300,300);
 
 		game.run(0, false, true);
-
+		
 		assertEquals(oldObjectsCount + 1, game.objects.size());
+	}
+
+	@Test
+	public void test_that_a_shot_which_reaches_a_border_gets_destroyed(){
+		game.run(0, false, false);
+		Shot shot = new Shot(game.player.position, Game.SHOT_SPEED, game.player.alignment, game.resolution);
+		shot.position = new Point2D.Double(0, 100);
+		game.objects.add(shot);
+		int oldCount = game.objects.size();
+		
+		game.run(0, false, false);
+		
+		assertEquals(oldCount - 1, game.objects.size());
+		assertFalse(game.objects.contains(shot));
 	}
 
 	private Point2D roundPoint(Point2D direction) {

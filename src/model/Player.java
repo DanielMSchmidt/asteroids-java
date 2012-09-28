@@ -55,5 +55,16 @@ public class Player extends SpaceObject {
 	public void addAlignment(int deltaAlignment) {
 		setAlignment(this.alignment + deltaAlignment);
 	}
+	
+	@Override
+    public boolean shouldBeDeletedIfOverlaps(ArrayList<SpaceObject> overlappingObjects) {
+		return classIsInList("model.Asteroid", overlappingObjects) || classIsInList("model.Shot", overlappingObjects);
+    }
+
+	@Override
+    public boolean shouldBeDeletedAsItCrashsWithWall(Dimension resolution) {
+	    return false;
+    }
+
 
 }
