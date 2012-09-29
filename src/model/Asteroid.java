@@ -7,9 +7,9 @@ import java.util.ArrayList;
 public class Asteroid extends SpaceObject {
 
 	/**
-	 * @param position
-	 * @param size
-	 * @param imagePath
+	 * Constructor for Asteroid
+	 * 
+	 * @see SpaceObject
 	 */
 	protected Asteroid(Point2D position, float size, Point2D direction) {
 		super(position, size);
@@ -38,7 +38,5 @@ public class Asteroid extends SpaceObject {
 	public boolean shouldBeDeletedAsItCrashsWithWall(Dimension resolution) {
 		return false;
 	}
-
-
 
 }
