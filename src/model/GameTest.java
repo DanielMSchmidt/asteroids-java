@@ -439,6 +439,33 @@ public class GameTest {
 		assertEquals(oldCount - 1, game.objects.size());
 		assertFalse(game.objects.contains(shot));
 	}
+	
+	@Test
+	public void test_that_a_asteroid_which_reaches_a_border_stays_alive(){
+		game.run(0, false, false);
+		Asteroid asteroid = new Asteroid(new Point2D.Double(0, 100), 20, new Point2D.Double(-10, 0));
+		game.objects.add(asteroid);
+		int oldCount = game.objects.size();
+		
+		game.run(0, false, false);
+		
+		assertEquals(oldCount, game.objects.size());
+		assertTrue(game.objects.contains(asteroid));
+	}
+	
+	@Test
+	public void test_that_a_player_which_reaches_a_border_stays_alive(){
+		game.run(0, false, false);
+		Player player = new Player("TEST", new Point2D.Double(0, 100));
+		player.direction = new Point2D.Double(-10, 0);
+		game.objects.add(player);
+		int oldCount = game.objects.size();
+		
+		game.run(0, false, false);
+		
+		assertEquals(oldCount, game.objects.size());
+		assertTrue(game.objects.contains(player));
+	}
 
 	private Point2D roundPoint(Point2D direction) {
 		return new Point2D.Double((int) Math.round(direction.getX()), (int) Math.round(direction.getY()));
