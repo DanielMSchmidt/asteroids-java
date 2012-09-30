@@ -32,6 +32,7 @@ public class Game {
 		this.player.direction = new Point2D.Double(0, -PLAYER_SPEED);
 		this.objects = new ArrayList<SpaceObject>();
 		this.level = startLevel - 1;
+		this.score = 0;
 	}
 
 	public void resetGame() {

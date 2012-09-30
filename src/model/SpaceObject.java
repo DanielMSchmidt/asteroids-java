@@ -17,6 +17,7 @@ public abstract class SpaceObject {
 	Point2D position;
 	float size;
 	Point2D direction;
+	protected boolean shouldBounceWithWall = true;
 
 	/**
 	 * Constructor for Spaceobject
@@ -56,7 +57,7 @@ public abstract class SpaceObject {
 		ArrayList<SpaceObject> overlapingObjects = this.overlapingObjects(objects);
 
 		if (borders.contains(true)) {
-			this.bounceWithWall(borders, resolution);
+			this.bounceWithWall(resolution);
 		} else if (!overlapingObjects.isEmpty()) {
 			bounceWithAsteroids(overlapingObjects);
 		} else {
@@ -153,54 +154,57 @@ public abstract class SpaceObject {
 	 * @param resolution
 	 *            The resolution of the enviroment the SpaceObject is in
 	 */
-	public void bounceWithWall(ArrayList<Boolean> borders, Dimension resolution) {
-		// FIXME Ugly code, but no other possibility seen
-		// FIXME Delete borders param and put it right here if no other use seen
-		int leftOrRightSide = 0;
-		int topOrBottomSide = 0;
-		for (int i = 0; i < borders.size(); i++) {
-			if (borders.get(i)) {
-				switch (i) {
-					case 0:
-						this.position.setLocation(this.position.getX(),
-						        Math.abs((this.position.getY() - this.size + this.direction.getY())) + this.size);
-						this.direction.setLocation(this.direction.getX(), Math.abs(this.direction.getY()));
+	public void bounceWithWall(Dimension resolution) {
+		// TODO Ugly code, but no other possibility seen
+		if (shouldBounceWithWall) {
+			ArrayList<Boolean> borders = getBorders(resolution);
+			int leftOrRightSide = 0;
+			int topOrBottomSide = 0;
+			for (int i = 0; i < borders.size(); i++) {
+				if (borders.get(i)) {
+					switch (i) {
+						case 0:
+							this.position.setLocation(this.position.getX(),
+							        Math.abs((this.position.getY() - this.size + this.direction.getY())) + this.size);
+							this.direction.setLocation(this.direction.getX(), Math.abs(this.direction.getY()));
 
-						topOrBottomSide++;
-					break;
-					case 1:
-						this.position.setLocation(resolution.width
-						        - (resolution.width - (this.position.getX() + this.direction.getX() - this.size)),
-						        this.position.getY());
-						this.direction.setLocation(-1 * Math.abs(this.direction.getX()), this.direction.getY());
+							topOrBottomSide++;
+						break;
+						case 1:
+							this.position.setLocation(resolution.width
+							        - (resolution.width - (this.position.getX() + this.direction.getX() - this.size)),
+							        this.position.getY());
+							this.direction.setLocation(-1 * Math.abs(this.direction.getX()), this.direction.getY());
 
-						leftOrRightSide++;
-					break;
-					case 2:
-						this.position.setLocation(this.position.getX(), resolution.height
-						        - (resolution.height - (this.position.getY() + this.direction.getY() - this.size)));
-						this.direction.setLocation(this.direction.getX(), -1 * Math.abs(this.direction.getY()));
+							leftOrRightSide++;
+						break;
+						case 2:
+							this.position.setLocation(this.position.getX(), resolution.height
+							        - (resolution.height - (this.position.getY() + this.direction.getY() - this.size)));
+							this.direction.setLocation(this.direction.getX(), -1 * Math.abs(this.direction.getY()));
 
-						topOrBottomSide++;
-					break;
-					case 3:
-						this.position.setLocation(Math.abs(this.position.getX() - this.size + this.direction.getX())
-						        + this.size, this.position.getY());
-						this.direction.setLocation(Math.abs(this.direction.getX()), this.direction.getY());
+							topOrBottomSide++;
+						break;
+						case 3:
+							this.position.setLocation(
+							        Math.abs(this.position.getX() - this.size + this.direction.getX()) + this.size,
+							        this.position.getY());
+							this.direction.setLocation(Math.abs(this.direction.getX()), this.direction.getY());
 
-						leftOrRightSide++;
-					break;
+							leftOrRightSide++;
+						break;
+					}
+
 				}
-
 			}
-		}
 
-		if (leftOrRightSide > 1 || topOrBottomSide > 1) {
-			throw new RuntimeException("Impossible bounce detected");
-		} else if (leftOrRightSide == 1 && topOrBottomSide == 0) {
-			this.position.setLocation(this.position.getX(), this.position.getY() + this.direction.getY());
-		} else if (leftOrRightSide == 0 && topOrBottomSide == 1) {
-			this.position.setLocation(this.position.getX() + this.direction.getX(), this.position.getY());
+			if (leftOrRightSide > 1 || topOrBottomSide > 1) {
+				throw new RuntimeException("Impossible bounce detected");
+			} else if (leftOrRightSide == 1 && topOrBottomSide == 0) {
+				this.position.setLocation(this.position.getX(), this.position.getY() + this.direction.getY());
+			} else if (leftOrRightSide == 0 && topOrBottomSide == 1) {
+				this.position.setLocation(this.position.getX() + this.direction.getX(), this.position.getY());
+			}
 		}
 	}
 

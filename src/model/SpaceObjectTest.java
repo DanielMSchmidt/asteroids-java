@@ -42,8 +42,7 @@ public class SpaceObjectTest {
 		ArrayList<SpaceObject> objects = new ArrayList<SpaceObject>();
 		objects.add(new Asteroid(new Point2D.Double(500, 500), 10, new Point2D.Double()));
 
-		assertEquals(new ArrayList<SpaceObject>(),
-				player1.overlapingObjects(objects));
+		assertEquals(new ArrayList<SpaceObject>(), player1.overlapingObjects(objects));
 	}
 
 	@Test
@@ -81,75 +80,73 @@ public class SpaceObjectTest {
 		assertTrue(player1.overlapingObjects(objects).contains(asteroid1));
 	}
 
+	// FIXME Fix Tests
 	@Test
 	public void test_bounce_with_top_wall() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 5,
-				new Point2D.Double(10, -5));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(5, 10), 5, new Point2D.Double(10, -5));
 		ArrayList<Boolean> a = new ArrayList<Boolean>();
 		a.add(true);
 		a.add(false);
 		a.add(false);
 		a.add(false);
 
-		asteroid.bounceWithWall(a, RESOLUTION);
+		asteroid.bounceWithWall(RESOLUTION);
 
 		assertEquals(new Point2D.Double(10, 5), asteroid.getDirection());
 	}
 
 	@Test
 	public void test_bounce_with_right_wall() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 5, new Point2D.Double(10, 5));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(10, RESOLUTION.getWidth() -5), 5, new Point2D.Double(10, 5));
 		ArrayList<Boolean> a = new ArrayList<Boolean>();
 		a.add(false);
 		a.add(true);
 		a.add(false);
 		a.add(false);
 
-		asteroid.bounceWithWall(a, RESOLUTION);
+		asteroid.bounceWithWall(RESOLUTION);
 
 		assertEquals(new Point2D.Double(-10, 5), asteroid.getDirection());
 	}
 
 	@Test
 	public void test_bounce_with_bottom_wall() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 5, new Point2D.Double(10, 5));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(RESOLUTION.getHeight() -5, 10), 5, new Point2D.Double(10, 5));
 		ArrayList<Boolean> a = new ArrayList<Boolean>();
 		a.add(false);
 		a.add(false);
 		a.add(true);
 		a.add(false);
 
-		asteroid.bounceWithWall(a, RESOLUTION);
+		asteroid.bounceWithWall(RESOLUTION);
 
 		assertEquals(new Point2D.Double(10, -5), asteroid.getDirection());
 	}
 
 	@Test
 	public void test_bounce_with_left_wall() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 5,
-				new Point2D.Double(-10, 5));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 5), 5, new Point2D.Double(-10, 5));
 		ArrayList<Boolean> a = new ArrayList<Boolean>();
 		a.add(false);
 		a.add(false);
 		a.add(false);
 		a.add(true);
 
-		asteroid.bounceWithWall(a, RESOLUTION);
+		asteroid.bounceWithWall(RESOLUTION);
 
 		assertEquals(new Point2D.Double(10, 5), asteroid.getDirection());
 	}
 
 	@Test
 	public void test_bounce_with_two_walls() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 5,
-				new Point2D.Double(-10, 5));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 5, new Point2D.Double(-10, 5));
 		ArrayList<Boolean> a = new ArrayList<Boolean>();
 		a.add(false);
 		a.add(false);
 		a.add(true);
 		a.add(true);
 
-		asteroid.bounceWithWall(a, RESOLUTION);
+		asteroid.bounceWithWall(RESOLUTION);
 
 		assertEquals(new Point2D.Double(10, -5), asteroid.getDirection());
 	}
@@ -164,9 +161,10 @@ public class SpaceObjectTest {
 		a.add(true);
 
 		try {
-			asteroid.bounceWithWall(a, RESOLUTION);
+			asteroid.bounceWithWall(RESOLUTION);
 			fail("No Exception caught");
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			assertEquals("Impossible bounce detected", e.getMessage());
 		}
 	}
@@ -209,8 +207,7 @@ public class SpaceObjectTest {
 
 	@Test
 	public void test_that_move_adds_the_direction_on_object() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(100, 100), 10, new Point2D.Double(10,
-				1));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(100, 100), 10, new Point2D.Double(10, 1));
 
 		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
@@ -219,8 +216,7 @@ public class SpaceObjectTest {
 
 	@Test
 	public void test_that_move_doesnt_move_over_the_border() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 10, new Point2D.Double(-10,
-				-1));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 10, new Point2D.Double(-10, -1));
 
 		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
@@ -232,8 +228,7 @@ public class SpaceObjectTest {
 
 	@Test
 	public void test_that_move_doesnt_move_over_the_border_on_big_objects() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(110, 110), 100, new Point2D.Double(
-				-30, 0));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(110, 110), 100, new Point2D.Double(-30, 0));
 
 		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
@@ -245,8 +240,7 @@ public class SpaceObjectTest {
 
 	@Test
 	public void test_that_move_bounces_correctly_on_the_top_left_border() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 10, new Point2D.Double(-10,
-				-1));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 10, new Point2D.Double(-10, -1));
 
 		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
@@ -255,8 +249,7 @@ public class SpaceObjectTest {
 
 	@Test
 	public void test_that_move_bounces_correctly_on_the_right_border() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(625, 100), 10, new Point2D.Double(10,
-				0));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(625, 100), 10, new Point2D.Double(10, 0));
 
 		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
@@ -265,8 +258,7 @@ public class SpaceObjectTest {
 
 	@Test
 	public void test_that_move_bounces_correctly_on_the_bottom_border() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(25, 305), 10, new Point2D.Double(10,
-				10));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(25, 305), 10, new Point2D.Double(10, 10));
 
 		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
@@ -275,8 +267,7 @@ public class SpaceObjectTest {
 
 	@Test
 	public void test_that_move_bounces_correctly_on_the_border_on_big_objects() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(110, 110), 100, new Point2D.Double(
-				-30, 0));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(110, 110), 100, new Point2D.Double(-30, 0));
 
 		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
@@ -285,8 +276,7 @@ public class SpaceObjectTest {
 
 	@Test
 	public void test_that_move_changes_the_direction() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 10, new Point2D.Double(-10,
-				-1));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 10, new Point2D.Double(-10, -1));
 
 		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
@@ -295,8 +285,7 @@ public class SpaceObjectTest {
 
 	@Test
 	public void test_that_move_changes_the_direction_on_big_objects() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(110, 110), 100, new Point2D.Double(
-				-30, 0));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(110, 110), 100, new Point2D.Double(-30, 0));
 
 		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
@@ -305,8 +294,7 @@ public class SpaceObjectTest {
 
 	@Test
 	public void test_that_frequently_calling_move_does_let_the_object_everytime_be_in_space() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 10, new Point2D.Double(-10,
-				-1));
+		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 10, new Point2D.Double(-10, -1));
 		for (int i = 0; i < 121; i++) {
 			asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
