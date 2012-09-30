@@ -15,12 +15,12 @@ public class UniverseController {
 	 */
 
 	Timer timer;
-	
+
 	protected view.Game gView;
 	protected view.Menu mView;
 	protected view.Settings sView;
 	protected view.Highscore hView;
-	
+
 	protected model.Game gModel;
 	protected model.Highscore hModel;
 
@@ -31,7 +31,7 @@ public class UniverseController {
 	boolean shot;
 	boolean fast;
 	boolean help;
-	
+
 	protected UniverseController() {
 		super();
 		this.gModel = new model.Game("Test", new Dimension(800, 600));
@@ -40,36 +40,35 @@ public class UniverseController {
 		this.mView = new view.Menu(gModel.getResolution());
 		this.sView = new view.Settings(gModel.getResolution());
 		this.hView = new view.Highscore(hModel.getScores(), gModel.getResolution());
-		
+
 		this.gView.setKeyListener(new GameListener());
 		this.mView.setListener(new MenuListener());
 		this.sView.setListener(new SettingsListener());
 		this.hView.setListener(new HighscoreListener());
 	}
 
-
 	public void showMenu() {
 		mView.setVisible(true);
 	}
-	
+
 	private void startGame() {
 		this.gameEnd = false;
-		
+
 		forward = false;
 		left = false;
 		right = false;
 		shot = false;
 		fast = false;
 		help = false;
-		
+
 		timer = new Timer();
 
 		timer.schedule(new Task(), 0, 10);
 	}
-	
-	private void reloadGame(){
-		//TODO laden realisieren.
-		
+
+	private void reloadGame() {
+		// TODO laden realisieren.
+
 	}
 
 	class Task extends TimerTask {
@@ -77,25 +76,20 @@ public class UniverseController {
 			ArrayList<Printable> printables = gModel.getPrintables();
 			gView.printPrintables(printables, forward, gModel.getScore(), help);
 
-			try {
-				gModel.run(getAlignmentFromUser(), forward, shot);
-				shot = false;
-			}
-			catch (GameOverException end) {
-				gameEnd = true;
+			gameEnd = gModel.run(getAlignmentFromUser(), forward, shot);
+			shot = false;
+			if (gameEnd) {
 				gView.gameover();
 				gModel.resetGame();
 				this.cancel();
 			}
 
 		}
-		
-		//TODO Maybe also own task for overlapping detection (i don't see problems there beside deadlocks)
 
 		private int getAlignmentFromUser() {
 			int deltaAlignment = 0;
 			int turnspeed = 2;
-			if (fast){
+			if (fast) {
 				turnspeed = 4;
 			}
 			if (right) {
@@ -108,65 +102,59 @@ public class UniverseController {
 		}
 	}
 
-	protected void changeWindow(GUI c1, GUI c2){
+	protected void changeWindow(GUI c1, GUI c2) {
 		c1.setLocation(c2.getLocationOnScreen());
 		c1.setVisible(true);
 		c2.setVisible(false);
 	}
-	
-	//Menu
+
+	// Menu
 	class MenuListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-        	Object source = e.getSource();
-        	if(source == mView.startBtn){
-        		changeWindow(gView, mView);
-                startGame();        		
-        	}
-        	else if(source == mView.loadBtn){
-        		changeWindow(gView, mView);
-                reloadGame();
-        	}
-        	else if(source == mView.highscoreBtn){
-        		hView.refreshScores(hModel.getScores());
-        		changeWindow(hView, mView);
-        	}
-        	else if(source == mView.settingsBtn){
-        		changeWindow(sView,mView);
-        	}
-        	else if(source == mView.exitBtn){
-        		System.exit(0);
-        	}
-        }
-	}
-	
-	//Settings
-	class SettingsListener implements ActionListener {
-		public void actionPerformed(ActionEvent e){
+		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
-			if(source == sView.backBtn){
-				changeWindow(mView,sView);
-			}
-			else if(source == sView.saveBtn){
-				//TODO Implement method! Use implemented getter!
+			if (source == mView.startBtn) {
+				changeWindow(gView, mView);
+				startGame();
+			} else if (source == mView.loadBtn) {
+				changeWindow(gView, mView);
+				reloadGame();
+			} else if (source == mView.highscoreBtn) {
+				hView.refreshScores(hModel.getScores());
+				changeWindow(hView, mView);
+			} else if (source == mView.settingsBtn) {
+				changeWindow(sView, mView);
+			} else if (source == mView.exitBtn) {
+				System.exit(0);
 			}
 		}
 	}
-	
-	//Highscore
-	class HighscoreListener implements ActionListener {
-		public void actionPerformed(ActionEvent e){
+
+	// Settings
+	class SettingsListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
-			if(source == hView.backBtn){
-				changeWindow(mView, hView);
+			if (source == sView.backBtn) {
+				changeWindow(mView, sView);
+			} else if (source == sView.saveBtn) {
+				// TODO Implement method! Use implemented getter!
 			}
-			else if(source == hView.resetBtn){
+		}
+	}
+
+	// Highscore
+	class HighscoreListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+			if (source == hView.backBtn) {
+				changeWindow(mView, hView);
+			} else if (source == hView.resetBtn) {
 				hModel.resetScore();
 				hView.refreshScores(hModel.getScores());
 			}
-			
+
 		}
 	}
-	
+
 	// Game Keys
 	class GameListener implements KeyListener {
 
@@ -177,11 +165,11 @@ public class UniverseController {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-				changeWindow(mView,gView);
+				changeWindow(mView, gView);
 				gModel.resetGame();
 				timer.cancel();
 			}
-			if (e.getKeyCode() == KeyEvent.VK_F1){
+			if (e.getKeyCode() == KeyEvent.VK_F1) {
 				help = true;
 			}
 			if (!gameEnd) {
@@ -194,7 +182,7 @@ public class UniverseController {
 				if (e.getKeyCode() == KeyEvent.VK_D) {
 					right = true;
 				}
-				if (e.getKeyCode() == KeyEvent.VK_SHIFT){
+				if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 					fast = true;
 				}
 			}
@@ -202,7 +190,7 @@ public class UniverseController {
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_F1){
+			if (e.getKeyCode() == KeyEvent.VK_F1) {
 				help = false;
 			}
 			if (!gameEnd) {
@@ -218,7 +206,7 @@ public class UniverseController {
 				if (e.getKeyCode() == KeyEvent.VK_D) {
 					right = false;
 				}
-				if (e.getKeyCode() == KeyEvent.VK_SHIFT){
+				if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 					fast = false;
 				}
 			}

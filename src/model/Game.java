@@ -21,8 +21,8 @@ public class Game {
 		this.level = 0;
 		this.score = 0;
 	}
-	
-	public void resetGame(){
+
+	public void resetGame() {
 		this.player = new Player(player.name, new Point(this.resolution.height * 2 / 3, this.resolution.width / 2));
 		this.player.direction = new Point2D.Double(0, -PLAYER_SPEED);
 		this.objects = new ArrayList<SpaceObject>();
@@ -30,16 +30,17 @@ public class Game {
 		this.score = 0;
 	}
 
-	public void run(int deltaAlignment, boolean forward, boolean shoot) {
+	public boolean run(int deltaAlignment, boolean forward, boolean shoot) {
 		handleUserInput(deltaAlignment, forward, shoot);
 
 		moveSpaceObjects();
 		if (player.shouldBeDeletedIfOverlaps(player.overlapingObjects(this.objects))) {
-			throw new GameOverException(this.score);
+			return true;
 		}
 		this.objects = handleObjects(this.objects);
 
 		if (getAsteroidCount() == 0) nextLevel();
+		return false;
 	}
 
 	private void handleUserInput(int deltaAlignment, boolean forward, boolean shoot) {
@@ -114,6 +115,8 @@ public class Game {
 			int thisPoints = generateRandomPoints(availablePoints, count - i);
 			Asteroid asteroid = generateAsteroidByPoints(thisPoints);
 
+			// FIXME Radius of overlapping the player should be wider, maybe own
+			// helper
 			if (asteroid.overlapingObjects(this.objects).size() >= 1 || this.player.overlap(asteroid)) {
 				i--;
 			} else {
@@ -165,10 +168,10 @@ public class Game {
 		return list;
 	}
 
-	public int getScore(){
+	public int getScore() {
 		return score;
 	}
-	
+
 	public int getTotalPoints() {
 		int totalPoints = 0;
 
@@ -186,7 +189,8 @@ public class Game {
 		}
 		return i;
 	}
-	public Dimension getResolution(){
+
+	public Dimension getResolution() {
 		return this.resolution;
 	}
 

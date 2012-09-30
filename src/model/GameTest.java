@@ -188,14 +188,7 @@ public class GameTest {
 		game.player.position = new Point2D.Double(100, 100);
 		game.objects.add(new Asteroid(new Point2D.Double(111, 111), 10, new Point2D.Double(-10, -10)));
 
-		try {
-			game.run(0, false, false);
-			fail("There should be thrown a gameoverexception");
-		}
-		catch (RuntimeException ex) {
-			assertEquals(GameOverException.class, ex.getClass());
-			assertEquals(String.valueOf(game.score), ex.getMessage());
-		}
+		assertTrue(game.run(0, false, false));
 	}
 
 	@Test
@@ -203,14 +196,7 @@ public class GameTest {
 		game.player.setDirection(new Point2D.Double(10, 10)).position = new Point2D.Double(100, 100);
 		game.objects.add(new Shot(new Point2D.Double(111, 111), new Point2D.Double(-10, -10)));
 
-		try {
-			game.run(0, false, false);
-			fail("There should be thrown a gameoverexception");
-		}
-		catch (RuntimeException ex) {
-			assertEquals(GameOverException.class, ex.getClass());
-			assertEquals(String.valueOf(game.score), ex.getMessage());
-		}
+		assertTrue(game.run(0, false, false)); 
 	}
 
 	@Test
@@ -419,23 +405,23 @@ public class GameTest {
 		int oldObjectsCount = game.objects.size();
 		game.objects.get(0).position = new Point2D.Double(100, 100);
 		game.objects.get(1).position = new Point2D.Double(500, 500);
-		game.player.position = new Point2D.Double(300,300);
+		game.player.position = new Point2D.Double(300, 300);
 
 		game.run(0, false, true);
-		
+
 		assertEquals(oldObjectsCount + 1, game.objects.size());
 	}
 
 	@Test
-	public void test_that_a_shot_which_reaches_a_border_gets_destroyed(){
+	public void test_that_a_shot_which_reaches_a_border_gets_destroyed() {
 		game.run(0, false, false);
 		Shot shot = new Shot(game.player.position, Game.SHOT_SPEED, game.player.alignment, game.resolution);
 		shot.position = new Point2D.Double(0, 100);
 		game.objects.add(shot);
 		int oldCount = game.objects.size();
-		
+
 		game.run(0, false, false);
-		
+
 		assertEquals(oldCount - 1, game.objects.size());
 		assertFalse(game.objects.contains(shot));
 	}
