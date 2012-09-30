@@ -6,20 +6,32 @@ import java.util.ArrayList;
 
 public class Game {
 
-	protected static final int SHOT_SPEED = 10;
-	protected static final int PLAYER_SPEED = 5;
+	protected int SHOT_SPEED;
+	protected int PLAYER_SPEED;
 	Player player;
 	ArrayList<SpaceObject> objects;
 	int level, score;
 	Dimension resolution;
 
 	public Game(String playername, Dimension resolution) {
+		this.SHOT_SPEED = 10;
+		this.PLAYER_SPEED = 5;
 		this.resolution = resolution;
 		this.player = new Player(playername, new Point(this.resolution.height * 2 / 3, this.resolution.width / 2));
 		this.player.direction = new Point2D.Double(0, -PLAYER_SPEED);
 		this.objects = new ArrayList<SpaceObject>();
 		this.level = 0;
 		this.score = 0;
+	}
+
+	public Game(String playername, Dimension resolution, int speed, int startLevel) {
+		this.SHOT_SPEED = 2 * speed;
+		this.PLAYER_SPEED = speed;
+		this.resolution = resolution;
+		this.player = new Player(playername, new Point(this.resolution.height * 2 / 3, this.resolution.width / 2));
+		this.player.direction = new Point2D.Double(0, -PLAYER_SPEED);
+		this.objects = new ArrayList<SpaceObject>();
+		this.level = startLevel - 1;
 	}
 
 	public void resetGame() {
@@ -197,6 +209,10 @@ public class Game {
 	public void launchAShot() {
 		Shot shot = new Shot(this.player.position, SHOT_SPEED, this.player.alignment, this.resolution);
 		this.objects.add(shot);
+	}
+
+	public String getPlayername() {
+		return this.player.name;
 	}
 
 }

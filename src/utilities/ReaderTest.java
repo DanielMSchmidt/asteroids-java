@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class ReaderTest {
 	String OPTIONSLOCATION;
 	String HIGHSCORELOCATION;
@@ -27,7 +26,7 @@ public class ReaderTest {
 		HIGHSCORELOCATION = "TestHighscore";
 		reader = new Reader(OPTIONSLOCATION);
 		optionsReader = new OptionsReader(OPTIONSLOCATION);
-		highscoreReader = new HighscoreReader(HIGHSCORELOCATION, OPTIONSLOCATION);
+		highscoreReader = new HighscoreReader(HIGHSCORELOCATION);
 	}
 
 	private void initializeLists() {
@@ -39,7 +38,6 @@ public class ReaderTest {
 		optionlist.add("playername");
 		optionlist.add("123");
 		optionlist.add("456");
-		optionlist.add("7");
 		highscorelist = new ArrayList<String>();
 		highscorelist.add("player1");
 		highscorelist.add("500");
@@ -145,12 +143,12 @@ public class ReaderTest {
 
 		assertEquals(a, b);
 	}
-	
+
 	public void test_add_empty_data() throws IOException {
 		int oldSize = reader.readData(OPTIONSLOCATION).size();
 		reader.addData(arraylist, OPTIONSLOCATION);
 		int newSize = reader.readData(OPTIONSLOCATION).size();
-		
+
 		assertTrue(newSize == oldSize);
 	}
 
@@ -164,26 +162,12 @@ public class ReaderTest {
 		assertEquals(arraylist, a);
 	}
 
-	@Test
-	public void test_getter_methods() throws IOException {
-		reader.writeData(optionlist, OPTIONSLOCATION);
-		Integer maxPairs = Integer.valueOf(optionlist.get(3));
-		assertEquals(optionsReader.getPlayerName(), optionlist.get(0));
-		assertTrue(optionsReader.getMaxPairs() == maxPairs);
-		assertEquals(
-				optionsReader.getDimension(),
-				new Dimension(Integer.valueOf(optionlist.get(1)), Integer
-						.valueOf(optionlist.get(2))));
-	}
-
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_validate_options() throws IOException {
-		ArrayList<String> tooLongOptionsList = (ArrayList<String>) optionlist
-				.clone();
+		ArrayList<String> tooLongOptionsList = (ArrayList<String>) optionlist.clone();
 		tooLongOptionsList.add("senseless String");
-		ArrayList<String> wrongTypeOptionsList = (ArrayList<String>) optionlist
-				.clone();
+		ArrayList<String> wrongTypeOptionsList = (ArrayList<String>) optionlist.clone();
 		wrongTypeOptionsList.set(2, "not an integer");
 
 		assertTrue(optionsReader.validate(optionlist));
@@ -195,29 +179,25 @@ public class ReaderTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void test_save_with_validatopm() throws IOException {
-		ArrayList<String> tooLongOptionsList = (ArrayList<String>) optionlist
-				.clone();
+		ArrayList<String> tooLongOptionsList = (ArrayList<String>) optionlist.clone();
 		tooLongOptionsList.add("senseless String");
-		ArrayList<String> wrongTypeOptionsList = (ArrayList<String>) optionlist
-				.clone();
+		ArrayList<String> wrongTypeOptionsList = (ArrayList<String>) optionlist.clone();
 		wrongTypeOptionsList.set(2, "not an integer");
 
 		optionsReader.deleteFile();
 
 		try {
-	        optionsReader.save(optionlist);
-	        assertEquals(optionsReader.readData(), optionlist);
-	        
-	        optionsReader.save(wrongTypeOptionsList);
-	        assertEquals(optionsReader.readData(), optionlist);
-	        
-	        optionsReader.save(tooLongOptionsList);
-	        assertEquals(optionsReader.readData(), optionlist);
-        }
-        catch (Exception e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-        }
+			optionsReader.save(optionlist);
+			assertEquals(optionsReader.readData(), optionlist);
+
+			optionsReader.save(wrongTypeOptionsList);
+			assertEquals(optionsReader.readData(), optionlist);
+
+			optionsReader.save(tooLongOptionsList);
+			assertEquals(optionsReader.readData(), optionlist);
+		}
+		catch (Exception e) {
+		}
 
 	}
 
@@ -267,7 +247,7 @@ public class ReaderTest {
 		highscoreReader.addScore(highscorelist);
 
 		assertEquals(highscoreReader.readData().size(), highscorelist.size() * 2);
-		
+
 		highscoreReader.addScore(arraylist);
 		assertEquals(highscoreReader.readData().size(), highscorelist.size() * 2);
 	}
@@ -275,49 +255,45 @@ public class ReaderTest {
 	@Test
 	public void test_merge_scores() {
 		@SuppressWarnings("unchecked")
-		ArrayList<String> newHighscores = (ArrayList<String>) highscorelist
-				.clone();
+		ArrayList<String> newHighscores = (ArrayList<String>) highscorelist.clone();
 		ArrayList<String> mixed = new ArrayList<String>();
-		
+
 		for (int i = 1; i < highscorelist.size(); i = i + 2) {
 			newHighscores.set(i, String.valueOf(Integer.valueOf(newHighscores.get(i)) + 1));
-			mixed.add(newHighscores.get(i-1));
+			mixed.add(newHighscores.get(i - 1));
 			mixed.add(newHighscores.get(i));
-			mixed.add(highscorelist.get(i-1));
+			mixed.add(highscorelist.get(i - 1));
 			mixed.add(highscorelist.get(i));
 		}
-		
-		assertEquals(mixed, highscoreReader.mergeScores(newHighscores, highscorelist));		
+
+		assertEquals(mixed, highscoreReader.mergeScores(newHighscores, highscorelist));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_merge_scores_for_equal_lists() {
-		ArrayList<String> newHighscores = (ArrayList<String>) highscorelist
-				.clone();
+		ArrayList<String> newHighscores = (ArrayList<String>) highscorelist.clone();
 		ArrayList<String> mixed = new ArrayList<String>();
-		
+
 		for (int i = 1; i < highscorelist.size(); i = i + 2) {
-			mixed.add(newHighscores.get(i-1));
+			mixed.add(newHighscores.get(i - 1));
 			mixed.add(newHighscores.get(i));
-			mixed.add(highscorelist.get(i-1));
+			mixed.add(highscorelist.get(i - 1));
 			mixed.add(highscorelist.get(i));
 		}
-		
-		assertEquals(mixed, highscoreReader.mergeScores(newHighscores, highscorelist));		
+
+		assertEquals(mixed, highscoreReader.mergeScores(newHighscores, highscorelist));
 	}
-	
+
 	@Test
-	public void test_get_short_highscore(){
-		int maxPairs = optionsReader.getMaxPairs();
+	public void test_get_short_highscore() {
 		highscoreReader.deleteFile();
-		for (int i = 0; i < 6 ; i ++){
+		for (int i = 0; i < HighscoreReader.MAXVALUES * 2; i++) {
 			highscoreReader.addData(highscorelist);
 			ArrayList<String> highscore = highscoreReader.getShortHighscore();
-			
-			
+
 			assertTrue(highscore.size() <= highscoreReader.getHighscore().size());
-			assertTrue(highscore.size() <= maxPairs * 2);
+			assertTrue(highscore.size() <= HighscoreReader.MAXVALUES);
 		}
 	}
 }

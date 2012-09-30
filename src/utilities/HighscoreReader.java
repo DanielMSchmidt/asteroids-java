@@ -13,15 +13,13 @@ import java.util.ArrayList;
  */
 public class HighscoreReader extends Reader {
 
-	private int maxValues;
+	protected static final int MAXVALUES = 20;
 
 	/**
 	 * Default constructor, which writes in the highscore.txt
 	 */
 	public HighscoreReader() {
 		super("highscore.txt");
-		OptionsReader options = new OptionsReader();
-		this.maxValues = options.getMaxPairs() * 2;
 	}
 
 	/**
@@ -32,22 +30,6 @@ public class HighscoreReader extends Reader {
 	 */
 	public HighscoreReader(String location) {
 		super(location);
-		OptionsReader options = new OptionsReader();
-		this.maxValues = options.getMaxPairs() * 2;
-	}
-
-	/**
-	 * Extended constructor for changing the default optionslocation
-	 * 
-	 * @param location
-	 *            Destination the data should be stored
-	 * @param optionsLocation
-	 *            File were the options are stored
-	 */
-	public HighscoreReader(String location, String optionsLocation) {
-		super(location);
-		OptionsReader options = new OptionsReader(optionsLocation);
-		this.maxValues = options.getMaxPairs() * 2;
 	}
 
 	/**
@@ -90,9 +72,9 @@ public class HighscoreReader extends Reader {
 	 */
 	ArrayList<String> getShortHighscore() {
 		ArrayList<String> completeHighscore = getHighscore();
-		if (completeHighscore.size() > this.maxValues) {
+		if (completeHighscore.size() > this.MAXVALUES) {
 			ArrayList<String> shortHighscore = new ArrayList<String>();
-			shortHighscore.addAll(completeHighscore.subList(0, this.maxValues));
+			shortHighscore.addAll(completeHighscore.subList(0, this.MAXVALUES));
 			return shortHighscore;
 		}
 		return completeHighscore;

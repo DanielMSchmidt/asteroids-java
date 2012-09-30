@@ -18,7 +18,6 @@ public class Settings extends GUI{
 	        GraphicPanel paintArea = new GraphicPanel();
 	        GridBagLayout gbl = new GridBagLayout();
 	        paintArea.setLayout(gbl);
-	        //paintArea.setLayout(null);
 	        UIManager.put("Label.font", new Font("sansserif", Font.BOLD, 18));
 	        UIManager.put("Label.foreground", Color.WHITE);
 	        

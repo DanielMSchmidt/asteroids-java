@@ -38,4 +38,12 @@ public class Highscore {
     public String[][] getScores() {
         return scores;
     }
+
+	public void addScore(String name, int score) {
+		ArrayList<String> newScore = new ArrayList<String>();
+		newScore.add(name);
+		newScore.add(String.valueOf(score));
+		scoreReader.addScore(newScore);
+	    update();
+    }
 }

@@ -396,7 +396,7 @@ public class GameTest {
 
 		game.run(0, true, false);
 
-		assertEquals(new Point2D.Double(100, 100 - Game.PLAYER_SPEED), game.player.position);
+		assertEquals(new Point2D.Double(100, 100 - game.PLAYER_SPEED), game.player.position);
 	}
 
 	@Test
@@ -415,7 +415,7 @@ public class GameTest {
 	@Test
 	public void test_that_a_shot_which_reaches_a_border_gets_destroyed() {
 		game.run(0, false, false);
-		Shot shot = new Shot(game.player.position, Game.SHOT_SPEED, game.player.alignment, game.resolution);
+		Shot shot = new Shot(game.player.position, game.SHOT_SPEED, game.player.alignment, game.resolution);
 		shot.position = new Point2D.Double(0, 100);
 		game.objects.add(shot);
 		int oldCount = game.objects.size();

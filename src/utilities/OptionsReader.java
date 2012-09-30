@@ -1,8 +1,5 @@
 package utilities;
 
-import java.awt.Dimension;
-import java.io.Console;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -44,42 +41,27 @@ public class OptionsReader extends Reader {
 	}
 
 	/**
-	 * returns the saved playername
-	 * 
-	 * @return the saved playername
-	 */
-	public String getPlayerName() {
-		return readData().get(0);
-	}
-
-	public Dimension getDimension() {
-		ArrayList<String> arrList = readData();
-		Dimension out = new Dimension(Integer.valueOf(arrList.get(1)), Integer.valueOf(arrList.get(2)));
-		return out;
-	}
-
-	public int getMaxPairs() {
-		return Integer.valueOf(readData().get(3));
-	}
-
-	/**
 	 * Validates the options, if there are the right datatypes on each position
 	 * Expects input to be in form playername, dimensionX, dimensionY
 	 * 
 	 * @param options
 	 *            the options which should be validated
-	 * @return <CODE> True </CODE> if valid, else <CODE>False</CODE>
+	 * @return <CODE>True</CODE> if valid, else <CODE>False</CODE>
 	 */
 	protected boolean validate(ArrayList<String> options) {
-		if (options.size() != 4) {
+		if (options.size() != 3) {
 			return false;
 		}
-		for (int i = 1; i < 4; i++) {
-			// Value 1 - 3 should be int
-			if (!isInt(options.get(i))) {
-				return false;
-			}
+
+		// Value 1 + 2 should be int
+		if (!isInt(options.get(1))) {
+			return false;
 		}
+
+		if (!isInt(options.get(2))) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -124,14 +106,41 @@ public class OptionsReader extends Reader {
 	void initialize() {
 		ArrayList<String> input = new ArrayList<String>();
 		input.add("Player 1");
-		input.add("500");
-		input.add("500");
-		input.add("10");
+		input.add("5");
+		input.add("1");
 		try {
 			save(input);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * returns the saved playername
+	 * 
+	 * @return the saved playername
+	 */
+	public String getPlayerName() {
+		String a = readData().get(0);
+		return a;
+	}
+
+	/**
+	 * returns the startlevel of the game
+	 * 
+	 * @return the startlevel of the game
+	 */
+	public int getStartLevel() {
+		return Integer.valueOf(readData().get(1));
+	}
+	
+	/**
+	 * returns the speed of the player
+	 * 
+	 * @return the speed of the player
+	 */
+	public int getSpeed() {
+		return Integer.valueOf(readData().get(2));
 	}
 }

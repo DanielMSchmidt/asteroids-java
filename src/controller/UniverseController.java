@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import model.*;
+import utilities.OptionsReader;
 import view.*;
 
 public class UniverseController {
@@ -24,6 +25,8 @@ public class UniverseController {
 	protected model.Game gModel;
 	protected model.Highscore hModel;
 
+	protected utilities.OptionsReader oReader;
+
 	boolean gameEnd;
 	boolean forward;
 	boolean left;
@@ -34,16 +37,36 @@ public class UniverseController {
 
 	protected UniverseController() {
 		super();
-		this.gModel = new model.Game("Test", new Dimension(800, 600));
-		this.hModel = new model.Highscore();
-		this.gView = new view.Game(gModel.getResolution());
-		this.mView = new view.Menu(gModel.getResolution());
-		this.sView = new view.Settings(gModel.getResolution());
-		this.hView = new view.Highscore(hModel.getScores(), gModel.getResolution());
 
+		oReader = new OptionsReader();
+		constructGame();
+		constructMenu();
+		constructHighscore();
+		constructSettings();
+	}
+
+	private void constructGame() {
+		String playername = oReader.getPlayerName();
+		int speed = oReader.getSpeed();
+		int level = oReader.getStartLevel();
+		this.gModel = new model.Game(playername, new Dimension(800, 600), speed, level);
+		this.gView = new view.Game(gModel.getResolution());
 		this.gView.setKeyListener(new GameListener());
+	}
+
+	private void constructMenu() {
+		this.mView = new view.Menu(gModel.getResolution());
 		this.mView.setListener(new MenuListener());
+	}
+
+	private void constructSettings() {
+		this.sView = new view.Settings(gModel.getResolution());
 		this.sView.setListener(new SettingsListener());
+	}
+
+	private void constructHighscore() {
+		this.hModel = new model.Highscore();
+		this.hView = new view.Highscore(hModel.getScores(), gModel.getResolution());
 		this.hView.setListener(new HighscoreListener());
 	}
 
@@ -79,11 +102,16 @@ public class UniverseController {
 			gameEnd = gModel.run(getAlignmentFromUser(), forward, shot);
 			shot = false;
 			if (gameEnd) {
-				gView.gameover();
-				gModel.resetGame();
-				this.cancel();
+				endGame();
 			}
 
+		}
+
+		private void endGame() {
+			hModel.addScore(gModel.getPlayername(), gModel.getScore());
+			gView.gameover();
+			gModel.resetGame();
+			this.cancel();
 		}
 
 		private int getAlignmentFromUser() {
@@ -113,15 +141,17 @@ public class UniverseController {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source == mView.startBtn) {
+				constructGame();
 				changeWindow(gView, mView);
 				startGame();
 			} else if (source == mView.loadBtn) {
 				changeWindow(gView, mView);
 				reloadGame();
 			} else if (source == mView.highscoreBtn) {
-				hView.refreshScores(hModel.getScores());
+				constructHighscore();
 				changeWindow(hView, mView);
 			} else if (source == mView.settingsBtn) {
+				sView.setValues(oReader.getPlayerName(), oReader.getStartLevel(), oReader.getSpeed());
 				changeWindow(sView, mView);
 			} else if (source == mView.exitBtn) {
 				System.exit(0);
@@ -136,7 +166,16 @@ public class UniverseController {
 			if (source == sView.backBtn) {
 				changeWindow(mView, sView);
 			} else if (source == sView.saveBtn) {
-				// TODO Implement method! Use implemented getter!
+				ArrayList<String> options = new ArrayList<String>();
+				options.add(sView.getPlayerName());
+				options.add(String.valueOf(sView.getStartLevel()));
+				options.add(String.valueOf(sView.getSpeed()));
+				try {
+					oReader.save(options);
+				}
+				catch (Exception e1) {
+					// FIXME Print error Output somehow!
+				}
 			}
 		}
 	}
@@ -149,7 +188,9 @@ public class UniverseController {
 				changeWindow(mView, hView);
 			} else if (source == hView.resetBtn) {
 				hModel.resetScore();
-				hView.refreshScores(hModel.getScores());
+				changeWindow(mView, hView);
+				constructHighscore();
+				changeWindow(hView, mView);
 			}
 
 		}
