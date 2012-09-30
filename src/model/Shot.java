@@ -6,7 +6,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Shot extends SpaceObject {
-
+	int alignment;
+	
 	protected Shot(Point2D position, Point2D direction) {
 		super(position, 8);
 		this.direction = direction;
@@ -16,13 +17,13 @@ public class Shot extends SpaceObject {
 		super(new Point2D.Double(position.getX(), position.getY()), 5);
 		this.direction = transformVektorViaAngle(new Point2D.Double(0, -shotSpeed),
 				alignment);
-		
+		this.alignment = alignment;
 		this.move(resolution, new ArrayList<SpaceObject>());
 		this.move(resolution, new ArrayList<SpaceObject>());
 	}
 
 	public Printable getPrintable() {
-		return new Printable("shot.png", this.position, this.size, 0);
+		return new Printable("shot.png", this.position, this.size, this.alignment);
 	}
 
 	public int getPoints() {

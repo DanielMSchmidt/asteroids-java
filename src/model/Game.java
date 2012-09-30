@@ -21,6 +21,14 @@ public class Game {
 		this.level = 0;
 		this.score = 0;
 	}
+	
+	public void resetGame(){
+		this.player = new Player(player.name, new Point(this.resolution.height * 2 / 3, this.resolution.width / 2));
+		this.player.direction = new Point2D.Double(0, -PLAYER_SPEED);
+		this.objects = new ArrayList<SpaceObject>();
+		this.level = 0;
+		this.score = 0;
+	}
 
 	public void run(int deltaAlignment, boolean forward, boolean shoot) {
 		handleUserInput(deltaAlignment, forward, shoot);
@@ -126,12 +134,8 @@ public class Game {
 		Point speed = new Point();
 
 		for (int i = 1; i < points; i++) {
-			if (Math.round(Math.random()) == 1) {
-				if (size != 10) {
-					size -= 10;
-				} else {
-					i--;
-				}
+			if (Math.round(Math.random()) == 1 && size != 10) {
+				size -= 10;
 			} else {
 				int distribution = (int) (Math.random() * 5);
 				speed.x += distribution;
@@ -161,6 +165,10 @@ public class Game {
 		return list;
 	}
 
+	public int getScore(){
+		return score;
+	}
+	
 	public int getTotalPoints() {
 		int totalPoints = 0;
 
@@ -177,6 +185,9 @@ public class Game {
 			if (object.getClass() == Asteroid.class) i++;
 		}
 		return i;
+	}
+	public Dimension getResolution(){
+		return this.resolution;
 	}
 
 	public void launchAShot() {
