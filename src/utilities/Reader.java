@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Reader {
 
-	private String defaultDataName;
+	protected String defaultDataName;
 
 	/**
 	 * Constructor for Reader

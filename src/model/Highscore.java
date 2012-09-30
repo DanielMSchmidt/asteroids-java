@@ -26,9 +26,9 @@ public class Highscore {
         scoreReader.addScore(newScore);
     }
     
-    //TODO Implement Function
     public void resetScore(){
-    	
+    	scoreReader.deleteFile();    
+    	update();
     }
 
     public String[] getCaption() {
