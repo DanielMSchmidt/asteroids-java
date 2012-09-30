@@ -5,32 +5,56 @@ import java.io.Console;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * A Writer/Reader which handles the Options, which can be saved through
+ * the menu
+ * 
+ * @author danielschmidt
+ * 
+ */
 public class OptionsReader extends Reader {
 
+	/**
+	 * Constructor for OptionsReader
+	 */
 	public OptionsReader() {
 		super("options.txt");
 		initIfInvalid();
 	}
 
+	/**
+	 * Constructor for OptionsReader
+	 * 
+	 * @param location
+	 *            were the file should be saved
+	 */
 	public OptionsReader(String location) {
 		super(location);
 		initIfInvalid();
 	}
 
+	/**
+	 * initilizes the file if somehow there is invalid information (e.g. through
+	 * direct access)
+	 */
 	private void initIfInvalid() {
 		if (!validate(this.readData())) {
 			initialize();
 		}
 	}
 
+	/**
+	 * returns the saved playername
+	 * 
+	 * @return the saved playername
+	 */
 	public String getPlayerName() {
 		return readData().get(0);
 	}
 
 	public Dimension getDimension() {
 		ArrayList<String> arrList = readData();
-		Dimension out = new Dimension(Integer.valueOf(arrList.get(1)),
-				Integer.valueOf(arrList.get(2)));
+		Dimension out = new Dimension(Integer.valueOf(arrList.get(1)), Integer.valueOf(arrList.get(2)));
 		return out;
 	}
 
@@ -38,10 +62,15 @@ public class OptionsReader extends Reader {
 		return Integer.valueOf(readData().get(3));
 	}
 
-	boolean validate(ArrayList<String> options) {
-		/**
-		 * Expects input to be in form playername, dimensionX, dimensionY
-		 */
+	/**
+	 * Validates the options, if there are the right datatypes on each position
+	 * Expects input to be in form playername, dimensionX, dimensionY
+	 * 
+	 * @param options
+	 *            the options which should be validated
+	 * @return <CODE> True </CODE> if valid, else <CODE>False</CODE>
+	 */
+	protected boolean validate(ArrayList<String> options) {
 		if (options.size() != 4) {
 			return false;
 		}
@@ -54,37 +83,45 @@ public class OptionsReader extends Reader {
 		return true;
 	}
 
+	/**
+	 * returns true if string can be interpreted as integer
+	 * 
+	 * @param a
+	 *            string, to be tested
+	 * @return <code> true </code> if a is an integer
+	 */
 	private boolean isInt(String a) {
-		/**
-		 * returns true if string can be interpreted as integer Uses regular
-		 * expression to do this (\\d+)
-		 */
 		try {
 			Integer.parseInt(a);
-		} catch (Exception ex) {
-			// Return false if a isn't int
+		}
+		catch (Exception ex) {
 			return false;
 		}
-		// else return true
 		return true;
-
 	}
 
-	public void save(ArrayList<String> options) {
+	/**
+	 * saves the options into a file
+	 * 
+	 * @param options
+	 *            the options which should be saved
+	 * @throws Exception
+	 *             if the file can't be found, wirtten or if the options are
+	 *             invalid
+	 */
+	public void save(ArrayList<String> options) throws Exception {
 		if (validate(options)) {
-			try {
-				writeData(options);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			writeData(options);
+		} else {
+			throw new Exception("The arguments are invalid");
 		}
 
 	}
 
+	/**
+	 * creates default values for all available options
+	 */
 	void initialize() {
-		/**
-		 * creates default values for all available options
-		 */
 		ArrayList<String> input = new ArrayList<String>();
 		input.add("Player 1");
 		input.add("500");
@@ -92,8 +129,9 @@ public class OptionsReader extends Reader {
 		input.add("10");
 		try {
 			save(input);
-		} catch (Exception e) {
-			// can't happen due to tests
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

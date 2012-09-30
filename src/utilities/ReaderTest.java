@@ -204,14 +204,20 @@ public class ReaderTest {
 
 		optionsReader.deleteFile();
 
-		optionsReader.save(optionlist);
-		assertEquals(optionsReader.readData(), optionlist);
-
-		optionsReader.save(wrongTypeOptionsList);
-		assertEquals(optionsReader.readData(), optionlist);
-
-		optionsReader.save(tooLongOptionsList);
-		assertEquals(optionsReader.readData(), optionlist);
+		try {
+	        optionsReader.save(optionlist);
+	        assertEquals(optionsReader.readData(), optionlist);
+	        
+	        optionsReader.save(wrongTypeOptionsList);
+	        assertEquals(optionsReader.readData(), optionlist);
+	        
+	        optionsReader.save(tooLongOptionsList);
+	        assertEquals(optionsReader.readData(), optionlist);
+        }
+        catch (Exception e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+        }
 
 	}
 
@@ -281,7 +287,7 @@ public class ReaderTest {
 			mixed.add(highscorelist.get(i));
 		}
 		
-		assertEquals(mixed, highscoreReader.merge(newHighscores, highscorelist));		
+		assertEquals(mixed, highscoreReader.mergeScores(newHighscores, highscorelist));		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -298,7 +304,7 @@ public class ReaderTest {
 			mixed.add(highscorelist.get(i));
 		}
 		
-		assertEquals(mixed, highscoreReader.merge(newHighscores, highscorelist));		
+		assertEquals(mixed, highscoreReader.mergeScores(newHighscores, highscorelist));		
 	}
 	
 	@Test

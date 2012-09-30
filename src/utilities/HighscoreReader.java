@@ -4,48 +4,77 @@ import java.awt.List;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * A Writer/Reader which handles the highscores and formatts it for the
+ * highscoretable
+ * 
+ * @author danielschmidt
+ * 
+ */
 public class HighscoreReader extends Reader {
 
 	private int maxValues;
 
+	/**
+	 * Default constructor, which writes in the highscore.txt
+	 */
 	public HighscoreReader() {
 		super("highscore.txt");
 		OptionsReader options = new OptionsReader();
 		this.maxValues = options.getMaxPairs() * 2;
 	}
 
+	/**
+	 * Extended constructor, which writes in the location
+	 * 
+	 * @param location
+	 *            Destination the data should be stored
+	 */
 	public HighscoreReader(String location) {
 		super(location);
 		OptionsReader options = new OptionsReader();
 		this.maxValues = options.getMaxPairs() * 2;
 	}
 
+	/**
+	 * Extended constructor for changing the default optionslocation
+	 * 
+	 * @param location
+	 *            Destination the data should be stored
+	 * @param optionsLocation
+	 *            File were the options are stored
+	 */
 	public HighscoreReader(String location, String optionsLocation) {
 		super(location);
 		OptionsReader options = new OptionsReader(optionsLocation);
 		this.maxValues = options.getMaxPairs() * 2;
 	}
 
-	public void addScore(ArrayList<String> data) {
-		/**
-		 * Adds a score into the highscore (sorts it in)
-		 */
+	/**
+	 * Adds a score into the highscore (sorts it in)
+	 * 
+	 * @param score
+	 *            Score to be added
+	 */
+	public void addScore(ArrayList<String> score) {
 		ArrayList<String> oldData = readData();
 		try {
-			if (validate(data)) {
-				writeData(merge(oldData, data));
+			if (validate(score)) {
+				writeData(mergeScores(oldData, score));
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
 
-	public ArrayList<String> getHighscore() {
-		/**
-		 * gets the Highscore as ArrayList<String> and validates it before
-		 * returning it
-		 */
+	/**
+	 * gets the complete highscore as ArrayList and validates it
+	 * 
+	 * @return a validated ArrayList of all scores
+	 */
+	ArrayList<String> getHighscore() {
 		ArrayList<String> a = readData();
 		if (validate(a)) {
 			return a;
@@ -54,17 +83,28 @@ public class HighscoreReader extends Reader {
 
 	}
 
-	public ArrayList<String> getShortHighscore() {
-		ArrayList<String> a = getHighscore();
-		if (a.size() > this.maxValues) {
-			ArrayList<String> b = new ArrayList<String>();
-			b.addAll(a.subList(0, this.maxValues));
-			return b;
+	/**
+	 * gets the shortened highscore, which has max. maxPairs scores in it
+	 * 
+	 * @return a shortened highscore
+	 */
+	ArrayList<String> getShortHighscore() {
+		ArrayList<String> completeHighscore = getHighscore();
+		if (completeHighscore.size() > this.maxValues) {
+			ArrayList<String> shortHighscore = new ArrayList<String>();
+			shortHighscore.addAll(completeHighscore.subList(0, this.maxValues));
+			return shortHighscore;
 		}
-		return a;
+		return completeHighscore;
 
 	}
 
+	/**
+	 * Formats the highscore in a 2D Array and ready to display on a table
+	 * element
+	 * 
+	 * @return a 2D Stringarray of names and scores
+	 */
 	public String[][] getFormattedHighscore() {
 		ArrayList<String> score = getShortHighscore();
 		int length = score.size();
@@ -82,9 +122,16 @@ public class HighscoreReader extends Reader {
 		return a;
 	}
 
+	/**
+	 * Validates the score
+	 * 
+	 * @param score
+	 *            the score to be validated
+	 * @return <code>true</code> if it is valid, else <code>false</code>
+	 */
 	boolean validate(ArrayList<String> score) {
 		if (score.size() % 2 == 1) {
-			// if odd number it can't be right
+			// if odd numbercount it can't be right
 			return false;
 		}
 		for (int i = 0; i < score.size(); i++) {
@@ -93,7 +140,8 @@ public class HighscoreReader extends Reader {
 				// if odd it should be a number
 				try {
 					Integer.parseInt(score.get(i));
-				} catch (NumberFormatException nfe) {
+				}
+				catch (NumberFormatException nfe) {
 					// returns false if no number
 					return false;
 				}
@@ -104,33 +152,53 @@ public class HighscoreReader extends Reader {
 
 	}
 
-	ArrayList<String> merge(ArrayList<String> data, ArrayList<String> newInput) {
+	/**
+	 * merges two arraylist of scores into one
+	 * 
+	 * @param data
+	 *            an arraylist of scores
+	 * @param newInput
+	 *            an arraylist of scores
+	 * @return a combined and sorted arraylist of scores
+	 */
+	protected ArrayList<String> mergeScores(ArrayList<String> data, ArrayList<String> newInput) {
 		ArrayList<String> a = new ArrayList<String>();
-		insertionSort(newInput, a);
-		insertionSort(data, a);
+		sortScores(newInput, a);
+		sortScores(data, a);
 		return a;
 	}
 
-	private void insertionSort(ArrayList<String> oldList,
-			ArrayList<String> newList) {
-		for (int i = 1; i < oldList.size(); i = i + 2) {
-			int j = getPositionOfSortedScore(oldList, newList, i);
-			if (j == -1) {
-				j = newList.size() + 1;
-			}
-			newList.add(j - 1, oldList.get(i - 1));
-			newList.add(j, oldList.get(i));
+	/**
+	 * sorts the scores from highest to lowest
+	 * 
+	 * @param newScores
+	 *            an arraylist of scores
+	 * @param oldScores
+	 *            an arraylist of scores
+	 */
+	private void sortScores(ArrayList<String> newScores, ArrayList<String> oldScores) {
+		for (int i = 1; i < newScores.size(); i = i + 2) {
+			int j = getPositionOfSortedScore(newScores, oldScores, i);
+			oldScores.add(j - 1, newScores.get(i - 1));
+			oldScores.add(j, newScores.get(i));
 		}
 	}
 
-	private int getPositionOfSortedScore(ArrayList<String> newInput,
-			ArrayList<String> a, int i) {
-		for (int j = 1; j < a.size(); j = j + 2) {
-			if (Integer.valueOf(newInput.get(i)) > Integer.valueOf(a.get(j))) {
-
-				return j;
-			}
+	/**
+	 * gets the position were the new score should be added
+	 * 
+	 * @param newScores
+	 *            an arraylist of scores
+	 * @param oldScores
+	 *            an arraylist of scores
+	 * @param i
+	 *            the position of the new element which should be added
+	 * @return the position the new score should be added
+	 */
+	private int getPositionOfSortedScore(ArrayList<String> newScores, ArrayList<String> oldScores, int i) {
+		for (int j = 1; j < oldScores.size(); j = j + 2) {
+			if (Integer.valueOf(newScores.get(i)) > Integer.valueOf(oldScores.get(j))) return j;
 		}
-		return -1;
+		return oldScores.size() + 1;
 	}
 }

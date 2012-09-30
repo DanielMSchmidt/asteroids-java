@@ -5,6 +5,14 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+/**
+ * The basic object in the Game, from which all other inherite. It provides
+ * basic interaction and movement functionallity and it is provides a printable
+ * version/image of itself.
+ * 
+ * @author danielschmidt
+ * 
+ */
 public abstract class SpaceObject {
 	Point2D position;
 	float size;
@@ -19,7 +27,7 @@ public abstract class SpaceObject {
 	 *            The size of the SpaceObject
 	 */
 	protected SpaceObject(Point2D position, float size) {
-		//FIXME Add direction to constructor
+		// FIXME Add direction to constructor
 		super();
 		this.position = position;
 		this.size = size;
