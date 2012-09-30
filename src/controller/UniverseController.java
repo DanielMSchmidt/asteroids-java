@@ -2,10 +2,12 @@ package controller;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import model.*;
+import utilities.GameReader;
 import utilities.OptionsReader;
 import view.*;
 
@@ -26,6 +28,7 @@ public class UniverseController {
 	protected model.Highscore hModel;
 
 	protected utilities.OptionsReader oReader;
+	protected utilities.GameReader gReader;
 
 	boolean gameEnd;
 	boolean forward;
@@ -39,6 +42,7 @@ public class UniverseController {
 		super();
 
 		oReader = new OptionsReader();
+		gReader = new GameReader();
 		constructGame();
 		constructMenu();
 		constructHighscore();
@@ -90,8 +94,12 @@ public class UniverseController {
 	}
 
 	private void reloadGame() {
-		// TODO laden realisieren.
-
+		try {
+	        gModel = gReader.loadGame();
+        }
+        catch (IOException e) {
+	        constructGame();
+        }
 	}
 
 	class Task extends TimerTask {
@@ -110,7 +118,7 @@ public class UniverseController {
 		private void endGame() {
 			hModel.addScore(gModel.getPlayername(), gModel.getScore());
 			gView.gameover();
-			gModel.resetGame();
+			gReader.deleteFile();
 			this.cancel();
 		}
 
@@ -207,7 +215,7 @@ public class UniverseController {
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				changeWindow(mView, gView);
-				gModel.resetGame();
+				gReader.saveGame(gModel);
 				timer.cancel();
 			}
 			if (e.getKeyCode() == KeyEvent.VK_F1) {

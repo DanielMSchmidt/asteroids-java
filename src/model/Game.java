@@ -35,14 +35,6 @@ public class Game {
 		this.score = 0;
 	}
 
-	public void resetGame() {
-		this.player = new Player(player.name, new Point(this.resolution.height * 2 / 3, this.resolution.width / 2));
-		this.player.direction = new Point2D.Double(0, -PLAYER_SPEED);
-		this.objects = new ArrayList<SpaceObject>();
-		this.level = 0;
-		this.score = 0;
-	}
-
 	public boolean run(int deltaAlignment, boolean forward, boolean shoot) {
 		handleUserInput(deltaAlignment, forward, shoot);
 

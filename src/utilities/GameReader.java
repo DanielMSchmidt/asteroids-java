@@ -34,6 +34,8 @@ public class GameReader extends Reader {
 	}
 
 	public Game loadGame() throws IOException {
+		if (readRawData(defaultDataName) == "") throw new IOException("Data was deleted");
+
 		try {
 			FileInputStream fileIn = new FileInputStream(defaultDataName);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
