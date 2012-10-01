@@ -10,10 +10,6 @@ public class Player extends SpaceObject {
 	int score;
 	int alignment;
 
-	/**
-	 * @param name
-	 * @param score
-	 */
 	protected Player(String name, Point2D position) {
 		super(position,new Point2D.Double(0, -5), 20);
 		this.name = name;
@@ -82,5 +78,21 @@ public class Player extends SpaceObject {
 	public boolean shouldBeDeletedAsItCrashsWithWall(Dimension resolution) {
 		return false;
 	}
+
+	/**
+	 * checks if this object is within the range
+	 * @param object object to be checked
+	 * @param range the radius in which it should be
+	 * @return <code>true</code> if the object is in the radius
+	 */
+	public boolean isWithinRange(SpaceObject object, float range) {
+		float originalSize = this.size;
+		this.size = range;
+		
+	    boolean isInRadius = this.overlap(object);
+	    
+	    this.size = originalSize;
+	    return isInRadius;	    
+    }
 
 }
