@@ -15,6 +15,7 @@ import javax.swing.*;
  * @author danielschmidt
  * 
  */
+@SuppressWarnings("serial")
 public abstract class GUI extends JFrame {
 	BufferedImage picture;
 	BufferedImage originalPicture;

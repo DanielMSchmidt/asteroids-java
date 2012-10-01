@@ -11,6 +11,7 @@ import javax.swing.*;
  * @author danielschmidt
  * 
  */
+@SuppressWarnings("serial")
 public class Menu extends GUI {
 	public JButton startBtn;
 	public JButton loadBtn;

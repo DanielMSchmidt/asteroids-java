@@ -1,6 +1,5 @@
 package utilities;
 
-import java.awt.List;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -72,9 +71,9 @@ public class HighscoreReader extends Reader {
 	 */
 	ArrayList<String> getShortHighscore() {
 		ArrayList<String> completeHighscore = getHighscore();
-		if (completeHighscore.size() > this.MAXVALUES) {
+		if (completeHighscore.size() > HighscoreReader.MAXVALUES) {
 			ArrayList<String> shortHighscore = new ArrayList<String>();
-			shortHighscore.addAll(completeHighscore.subList(0, this.MAXVALUES));
+			shortHighscore.addAll(completeHighscore.subList(0, HighscoreReader.MAXVALUES));
 			return shortHighscore;
 		}
 		return completeHighscore;

@@ -11,6 +11,7 @@ import java.io.Serializable;
  * @author danielschmidt
  * 
  */
+@SuppressWarnings("serial")
 public class Game implements Serializable {
 
 	private static final float GENERATIONRADIUS = 100;

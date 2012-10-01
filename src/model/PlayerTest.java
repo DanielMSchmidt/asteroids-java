@@ -1,14 +1,8 @@
 package model;
 
 import static org.junit.Assert.*;
-
-import java.awt.Dimension;
-
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-
 import org.junit.*;
-import org.junit.internal.runners.statements.Fail;
 
 public class PlayerTest {
 	Player player1;

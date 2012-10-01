@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+@SuppressWarnings("serial")
 public class Shot extends SpaceObject {
 	int alignment;
 

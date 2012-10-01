@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
  * @author danielschmidt
  * 
  */
+@SuppressWarnings("serial")
 public class Highscore extends GUI {
 
 	public JButton backBtn;

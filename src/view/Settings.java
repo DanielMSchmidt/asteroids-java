@@ -11,6 +11,7 @@ import javax.swing.*;
  * @author danielschmidt
  * 
  */
+@SuppressWarnings("serial")
 public class Settings extends GUI {
 
 	public JButton backBtn;

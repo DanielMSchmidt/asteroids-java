@@ -3,24 +3,13 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.KeyListener;
-import java.awt.geom.Point2D;
 import java.awt.image.*;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
 import model.Printable;
-import model.SpaceObject;
 
 /**
  * The GUI for the Game
@@ -28,6 +17,7 @@ import model.SpaceObject;
  * @author danielschmidt
  * 
  */
+@SuppressWarnings("serial")
 public class Game extends GUI {
 	BufferedImage spaceshipImg;
 	BufferedImage spaceshipMovesImg;
