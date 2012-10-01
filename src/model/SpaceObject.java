@@ -71,7 +71,7 @@ public abstract class SpaceObject implements Serializable {
 	/**
 	 * Bounces with all SpaceObjects
 	 * 
-	 * @param objects
+	 * @param overlapingObjects	
 	 *            Should be all overlapping objects
 	 */
 	void bounceWithAsteroids(ArrayList<SpaceObject> overlapingObjects) {
