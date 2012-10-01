@@ -15,7 +15,7 @@ public class Settings extends GUI{
     
 	public Settings(Dimension resolution){
 		 super("Universe - Settings", resolution);
-	        GraphicPanel paintArea = new GraphicPanel();
+	        paintArea = new GraphicPanel();
 	        GridBagLayout gbl = new GridBagLayout();
 	        paintArea.setLayout(gbl);
 	        UIManager.put("Label.font", new Font("sansserif", Font.BOLD, 18));

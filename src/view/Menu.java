@@ -15,7 +15,7 @@ public class Menu extends GUI{
     public Menu(Dimension resolution) {
         super("Universe - Menu", resolution);
 
-        GraphicPanel paintArea = new GraphicPanel();
+        paintArea = new GraphicPanel();
 
         GridBagLayout gbl = new GridBagLayout();
         paintArea.setLayout(gbl);

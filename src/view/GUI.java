@@ -11,6 +11,9 @@ import javax.swing.*;
 public abstract class GUI extends JFrame {
 	BufferedImage picture;
 	BufferedImage originalPicture;
+	
+	GraphicPanel paintArea;
+	Dimension resolution;
 
     GUI(String title, Dimension resolution) {
         super(title);
@@ -19,27 +22,28 @@ public abstract class GUI extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        URL bildURL = getClass().getResource("/view/stars.jpg");
-    	
+        picture = loadImage("/view/stars.jpg");
+        originalPicture = copy(picture);
+    }
+    
+    static BufferedImage copy(BufferedImage bi) {
+    	 ColorModel cm = bi.getColorModel();
+    	 return new BufferedImage(cm, bi.copyData(null), cm.isAlphaPremultiplied(), null);
+    }
+    
+	public BufferedImage loadImage(String source){
+		BufferedImage img = null;
+		URL bildURL = getClass().getResource(source);
 		try {
-			picture = ImageIO.read(bildURL);
-		} catch (IOException e) {
-			//FIXME Add errror handling
-			// TODO Auto-generated catch block
+			img = ImageIO.read(bildURL);
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
-		originalPicture = deepCopy(picture);
-    }
-    
-    static BufferedImage deepCopy(BufferedImage bi) {
-    	 ColorModel cm = bi.getColorModel();
-    	 boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-    	 WritableRaster raster = bi.copyData(null);
-    	 return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
-    }
+		return img;
+	}
     
     class GraphicPanel extends JPanel {
-
         GraphicPanel() {
             setBackground(Color.black);
         }
@@ -63,6 +67,21 @@ public abstract class GUI extends JFrame {
         gbl.setConstraints(c, gbc);
         cont.add(c);
     }
+    
+	public void printError(String errorString, String errorMessage) {
+		picture = copy(originalPicture);
+		if (picture != null) {
+			
+			Graphics2D g = picture.createGraphics();
+			g.setColor(Color.red);
+			g.setFont(new Font("sansserif", Font.BOLD, 20));
+			g.drawString(errorString, 20, resolution.height/2);
+			g.setColor(Color.white);
+			g.setFont(new Font("sansserif", Font.BOLD, 12));
+			g.drawString(errorMessage, 20, resolution.height/2 + 30);
+		}
+		paintArea.repaint();
+	}
     
     static void addButton(Container cont, GridBagLayout gbl, JButton btn) {
         GridBagConstraints constraints = new GridBagConstraints();

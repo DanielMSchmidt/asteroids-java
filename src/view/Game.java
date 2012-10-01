@@ -29,10 +29,9 @@ public class Game extends GUI {
 	BufferedImage asteroid10Img;
 	BufferedImage asteroid20Img;
 	BufferedImage asteroid30Img;
-	GraphicPanel paintArea;
 	BufferedImage background;
 	int shipAlignment;
-	Dimension resolution;
+
 
 	public Game(Dimension resolution) {
 		super("Universe - Game", resolution);
@@ -41,56 +40,16 @@ public class Game extends GUI {
 		paintArea.setLayout(null);
 		add(paintArea);
 
-		// FIXME Player isn't centered i guess (hold space and turn)
-		// TODO Nicer code maybe?
-		URL bildURL = getClass().getResource("/view/spaceship.png");
-		try {
-			spaceshipImg = ImageIO.read(bildURL);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		bildURL = getClass().getResource("/view/spaceshipFire.png");
-		try {
-			spaceshipMovesImg = ImageIO.read(bildURL);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		bildURL = getClass().getResource("/view/asteroid30.png");
-		try {
-			asteroid30Img = ImageIO.read(bildURL);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		bildURL = getClass().getResource("/view/asteroid20.png");
-		try {
-			asteroid20Img = ImageIO.read(bildURL);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		bildURL = getClass().getResource("/view/asteroid10.png");
-		try {
-			asteroid10Img = ImageIO.read(bildURL);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		bildURL = getClass().getResource("/view/shot.png");
-		try {
-			shotImg = ImageIO.read(bildURL);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		spaceshipImg = loadImage("/view/spaceship.png");
+		spaceshipMovesImg = loadImage("/view/spaceshipFire.png");
+		asteroid30Img = loadImage("/view/asteroid30.png");
+		asteroid20Img = loadImage("/view/asteroid20.png");
+		asteroid10Img = loadImage("/view/asteroid10.png");
+		shotImg = loadImage("/view/shot.png");		
 	}
-
+	
 	public void printPrintables(ArrayList<Printable> list, boolean moving, int score, boolean help) {
-		picture = deepCopy(originalPicture);
+		picture = copy(originalPicture);
 		for (Printable item : list) {
 			Point position = new Point((int) item.getPosition().getX() - (int) item.getSize(), (int) item.getPosition().getY() - (int) item.getSize());
 			if (picture != null) {
@@ -103,19 +62,16 @@ public class Game extends GUI {
 						g.drawImage(rotate(spaceshipImg, shipAlignment), position.x, position.y, this);
 					}
 				} else if (item.getType() == "asteroid") {
-					if(item.getSize() == 30){
-						g.drawImage(asteroid30Img, position.x, position.y, this);
+					switch ((int)item.getSize()){
+						case 30:
+							g.drawImage(asteroid30Img, position.x, position.y, this);
+						case 20:
+							g.drawImage(asteroid20Img, position.x, position.y, this);
+						default:
+							g.drawImage(asteroid10Img, position.x, position.y, this);
 					}
-					else if(item.getSize() == 20){
-						g.drawImage(asteroid20Img, position.x, position.y, this);
-					}
-					else{
-						g.drawImage(asteroid10Img, position.x, position.y, this);
-					}
-						
 				} else {
-					Point2D additionalSize = SpaceObject.transformVektorViaAngle(new Point(0, -10), shipAlignment);
-					g.drawImage(rotate(shotImg, item.getAlignment()), position.x + (int) additionalSize.getX(), position.y + (int) additionalSize.getY(), this);
+					g.drawImage(rotate(shotImg, item.getAlignment()), position.x-8, position.y-8, this);
 				}
 				g.setFont(new Font("sansserif", Font.BOLD, 14));
 				g.setColor(Color.green);

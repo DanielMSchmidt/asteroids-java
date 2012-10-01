@@ -40,10 +40,12 @@ public class UniverseController {
 	boolean shot;
 	boolean fast;
 	boolean help;
+	boolean loadingError;
 
 	protected UniverseController() {
 		super();
-
+		
+		loadingError = false;
 		oReader = new OptionsReader();
 		gReader = new GameReader();
 		constructGame();
@@ -99,13 +101,11 @@ public class UniverseController {
 	private void reloadGame() {
 		try {
 			gModel = gReader.loadGame();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			constructGame();
-		}
-		finally {
 			startGame();
+		}
+		catch (Exception e) {
+			gView.printError("Es konnte kein Spiel geladen werden!", e.getMessage());
+			loadingError = true;
 		}
 	}
 
@@ -119,7 +119,6 @@ public class UniverseController {
 			if (gameEnd) {
 				endGame();
 			}
-
 		}
 
 		private void endGame() {
@@ -188,7 +187,7 @@ public class UniverseController {
 					oReader.save(options);
 				}
 				catch (Exception e1) {
-					// FIXME Print error Output somehow!
+					sView.printError("Settings konnten nicht geladen werden!", e1.getMessage());
 				}
 			}
 		}
@@ -221,30 +220,37 @@ public class UniverseController {
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				changeWindow(mView, gView);
-				if (gameEnd) {
+				if (gameEnd || loadingError) {
 					Game game = new Game(oReader.getPlayerName(), RESOLUTION, oReader.getSpeed(),
 					        oReader.getStartLevel());
 					gReader.saveGame(game);
+					loadingError = false;
 				} else {
 					gReader.saveGame(gModel);
 				}
-				timer.cancel();
+				try{
+					timer.cancel();
+				} catch (Exception ex){
+					
+				}
 			}
 			if (e.getKeyCode() == KeyEvent.VK_F1) {
 				help = true;
 			}
 			if (!gameEnd) {
-				if (e.getKeyCode() == KeyEvent.VK_W) {
-					forward = true;
-				}
-				if (e.getKeyCode() == KeyEvent.VK_A) {
-					left = true;
-				}
-				if (e.getKeyCode() == KeyEvent.VK_D) {
-					right = true;
-				}
-				if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-					fast = true;
+				switch(e.getKeyCode()){
+					case KeyEvent.VK_W: 
+						forward = true;
+						break;
+					case KeyEvent.VK_A:
+						left = true;
+						break;
+					case KeyEvent.VK_D:
+						right = true;
+						break;
+					case KeyEvent.VK_SHIFT:
+						fast = true;
+					default: break;
 				}
 			}
 		}
@@ -255,20 +261,22 @@ public class UniverseController {
 				help = false;
 			}
 			if (!gameEnd) {
-				if (e.getKeyCode() == KeyEvent.VK_W) {
-					forward = false;
-				}
-				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					shot = true;
-				}
-				if (e.getKeyCode() == KeyEvent.VK_A) {
-					left = false;
-				}
-				if (e.getKeyCode() == KeyEvent.VK_D) {
-					right = false;
-				}
-				if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-					fast = false;
+				switch(e.getKeyCode()){
+					case KeyEvent.VK_W: 
+						forward = false;
+						break;
+					case KeyEvent.VK_A:
+						left = false;
+						break;
+					case KeyEvent.VK_D:
+						right = false;
+						break;
+					case KeyEvent.VK_SHIFT:
+						fast = false;
+						break;
+					case KeyEvent.VK_SPACE:
+						shot = true;
+					default: break;
 				}
 			}
 		}

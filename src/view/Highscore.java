@@ -13,7 +13,7 @@ public class Highscore extends GUI {
 
 	public Highscore(String[][] scores, Dimension resolution) {
 		super("Universe - Highscore", resolution);
-		GraphicPanel paintArea = new GraphicPanel();
+		paintArea = new GraphicPanel();
 
 		GridBagLayout gbl = new GridBagLayout();
 		paintArea.setLayout(gbl);
