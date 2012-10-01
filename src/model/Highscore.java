@@ -4,46 +4,62 @@ import java.util.ArrayList;
 
 import utilities.HighscoreReader;
 
+/**
+ * Handles the highscores
+ * 
+ * @author danielschmidt
+ * 
+ */
 public class Highscore {
 
-    private HighscoreReader scoreReader;
-    private String[] caption;
-    private String[][] scores;
+	private HighscoreReader scoreReader;
+	private String[][] scores;
 
-    public Highscore() {
-        this.scoreReader = new HighscoreReader();
-        this.caption = new String[2];
-        caption[0] = "Score";
-        caption[1] = "Player";
-        this.scores = scoreReader.getFormattedHighscore();
-    }
+	/**
+	 * the highscore constructor
+	 */
+	public Highscore() {
+		this.scoreReader = new HighscoreReader();
+		this.scores = scoreReader.getFormattedHighscore();
+	}
 
-    public void update() {
-        this.scores = scoreReader.getFormattedHighscore();
-    }
+	/**
+	 * updates the score
+	 */
+	public void update() {
+		this.scores = scoreReader.getFormattedHighscore();
+	}
 
-    public void saveScore(ArrayList<String> newScore) {
-        scoreReader.addScore(newScore);
-    }
-    
-    public void resetScore(){
-    	scoreReader.deleteFile();    
-    	update();
-    }
+	/**
+	 * resets the score
+	 */
+	public void resetScore() {
+		scoreReader.deleteFile();
+		update();
+	}
 
-    public String[] getCaption() {
-        return caption;
-    }
+	/**
+	 * gets the scores
+	 * 
+	 * @return the scores
+	 */
+	public String[][] getScores() {
+		return scores;
+	}
 
-    public String[][] getScores() {
-        return scores;
-    }
-
+	/**
+	 * adds a new score
+	 * 
+	 * @param name
+	 *            playersname
+	 * @param score
+	 *            score which was scored
+	 */
 	public void addScore(String name, int score) {
 		ArrayList<String> newScore = new ArrayList<String>();
 		newScore.add(name);
 		newScore.add(String.valueOf(score));
 		scoreReader.addScore(newScore);
-	    update();
-    }
+		update();
+	}
 }

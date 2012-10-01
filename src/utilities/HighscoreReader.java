@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * A Writer/Reader which handles the highscores and formatts it for the
- * highscoretable
+ * A Writer/Reader which handles the highscores and formats it for the
+ * highscore
  * 
  * @author danielschmidt
  * 

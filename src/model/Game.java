@@ -182,14 +182,14 @@ public class Game implements Serializable {
 
 	/**
 	 * sets the level, generates the corresponding asteroids and adds them to
-	 * the objects listo
+	 * the objects list
 	 * 
 	 * @param level
 	 *            the level which should be set
 	 */
 	public void setLevel(int level) {
 		this.level = level;
-		generateAsteroids(level * 2, (int) Math.pow(2, level));
+		generateAsteroids(level, level * 2);
 	}
 
 	/**

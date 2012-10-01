@@ -12,13 +12,14 @@ import utilities.GameReader;
 import utilities.OptionsReader;
 import view.*;
 
+/**
+ * Maincontroller, which handles the model and the user I/O
+ * 
+ * @author danielschmidt
+ * 
+ */
 public class UniverseController {
 	public static final Dimension RESOLUTION = new Dimension(800, 600);
-
-	/**
-	 * @param gView
-	 * @param gModel
-	 */
 
 	Timer timer;
 
@@ -42,9 +43,12 @@ public class UniverseController {
 	boolean help;
 	boolean loadingError;
 
+	/**
+	 * Contructor
+	 */
 	protected UniverseController() {
 		super();
-		
+
 		loadingError = false;
 		oReader = new OptionsReader();
 		gReader = new GameReader();
@@ -54,6 +58,9 @@ public class UniverseController {
 		constructSettings();
 	}
 
+	/**
+	 * Constructs game Model and View
+	 */
 	private void constructGame() {
 		String playername = oReader.getPlayerName();
 		int speed = oReader.getSpeed();
@@ -63,26 +70,41 @@ public class UniverseController {
 		this.gView.setKeyListener(new GameListener());
 	}
 
+	/**
+	 * Constructs the menu
+	 */
 	private void constructMenu() {
 		this.mView = new view.Menu(gModel.getResolution());
 		this.mView.setListener(new MenuListener());
 	}
 
+	/**
+	 * constructs the settings view
+	 */
 	private void constructSettings() {
 		this.sView = new view.Settings(gModel.getResolution());
 		this.sView.setListener(new SettingsListener());
 	}
 
+	/**
+	 * constructs the highscore model and view
+	 */
 	private void constructHighscore() {
 		this.hModel = new model.Highscore();
 		this.hView = new view.Highscore(hModel.getScores(), gModel.getResolution());
 		this.hView.setListener(new HighscoreListener());
 	}
 
+	/**
+	 * shows the menu
+	 */
 	public void showMenu() {
 		mView.setVisible(true);
 	}
 
+	/**
+	 * starts the game
+	 */
 	private void startGame() {
 		this.gameEnd = false;
 
@@ -95,9 +117,12 @@ public class UniverseController {
 
 		timer = new Timer();
 
-		timer.schedule(new Task(), 0, 10);
+		timer.schedule(new GameTask(), 0, 10);
 	}
 
+	/**
+	 * loads the game from a file
+	 */
 	private void reloadGame() {
 		try {
 			gModel = gReader.loadGame();
@@ -109,7 +134,17 @@ public class UniverseController {
 		}
 	}
 
-	class Task extends TimerTask {
+	/**
+	 * Task which runs the Game
+	 * 
+	 * @author danielschmidt
+	 * 
+	 */
+	class GameTask extends TimerTask {
+		/**
+		 * gets and prints Printables from model, runs the next round of the
+		 * model and ends the game
+		 */
 		public void run() {
 			ArrayList<Printable> printables = gModel.getPrintables();
 			gView.printPrintables(printables, forward, gModel.getScore(), help);
@@ -121,12 +156,20 @@ public class UniverseController {
 			}
 		}
 
+		/**
+		 * ends the current Game
+		 */
 		private void endGame() {
 			hModel.addScore(gModel.getPlayername(), gModel.getScore());
 			gView.gameover();
 			this.cancel();
 		}
 
+		/**
+		 * returns the alignment from the userinput
+		 * 
+		 * @return the alignment from the userinput
+		 */
 		private int getAlignmentFromUser() {
 			int deltaAlignment = 0;
 			int turnspeed = 2;
@@ -143,13 +186,26 @@ public class UniverseController {
 		}
 	}
 
-	protected void changeWindow(GUI c1, GUI c2) {
-		c1.setLocation(c2.getLocationOnScreen());
-		c1.setVisible(true);
-		c2.setVisible(false);
+	/**
+	 * changes the active guis
+	 * 
+	 * @param nextGUI
+	 *            the gui which is active afterwards
+	 * @param currentGUI
+	 *            the gui which is inactive afterwards
+	 */
+	protected void changeWindow(GUI nextGUI, GUI currentGUI) {
+		nextGUI.setLocation(currentGUI.getLocationOnScreen());
+		nextGUI.setVisible(true);
+		currentGUI.setVisible(false);
 	}
 
-	// Menu
+	/**
+	 * Handles the menu view and exchange the window
+	 * 
+	 * @author danielschmidt
+	 * 
+	 */
 	class MenuListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
@@ -172,7 +228,12 @@ public class UniverseController {
 		}
 	}
 
-	// Settings
+	/**
+	 * Handles the settings view and exchange the window
+	 * 
+	 * @author danielschmidt
+	 * 
+	 */
 	class SettingsListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
@@ -193,7 +254,12 @@ public class UniverseController {
 		}
 	}
 
-	// Highscore
+	/**
+	 * Handles the highscore view and exchange the window
+	 * 
+	 * @author danielschmidt
+	 * 
+	 */
 	class HighscoreListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
@@ -209,7 +275,12 @@ public class UniverseController {
 		}
 	}
 
-	// Game Keys
+	/**
+	 * Handles the input during the game
+	 * 
+	 * @author danielschmidt
+	 * 
+	 */
 	class GameListener implements KeyListener {
 
 		@Override
@@ -228,29 +299,31 @@ public class UniverseController {
 				} else {
 					gReader.saveGame(gModel);
 				}
-				try{
+				try {
 					timer.cancel();
-				} catch (Exception ex){
-					
+				}
+				catch (Exception ex) {
+
 				}
 			}
 			if (e.getKeyCode() == KeyEvent.VK_F1) {
 				help = true;
 			}
 			if (!gameEnd) {
-				switch(e.getKeyCode()){
-					case KeyEvent.VK_W: 
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_W:
 						forward = true;
-						break;
+					break;
 					case KeyEvent.VK_A:
 						left = true;
-						break;
+					break;
 					case KeyEvent.VK_D:
 						right = true;
-						break;
+					break;
 					case KeyEvent.VK_SHIFT:
 						fast = true;
-					default: break;
+					default:
+					break;
 				}
 			}
 		}
@@ -261,22 +334,23 @@ public class UniverseController {
 				help = false;
 			}
 			if (!gameEnd) {
-				switch(e.getKeyCode()){
-					case KeyEvent.VK_W: 
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_W:
 						forward = false;
-						break;
+					break;
 					case KeyEvent.VK_A:
 						left = false;
-						break;
+					break;
 					case KeyEvent.VK_D:
 						right = false;
-						break;
+					break;
 					case KeyEvent.VK_SHIFT:
 						fast = false;
-						break;
+					break;
 					case KeyEvent.VK_SPACE:
 						shot = true;
-					default: break;
+					default:
+					break;
 				}
 			}
 		}

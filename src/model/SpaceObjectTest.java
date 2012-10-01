@@ -150,39 +150,12 @@ public class SpaceObjectTest {
 	}
 
 	@Test
-	public void test_that_move_bounces_correctly_on_the_top_left_border() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(10, 10), 10, new Point2D.Double(-10, -1));
-
-		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
-
-		assertEquals(new Point2D.Double(20, 11), asteroid.getPosition());
-	}
-
-	@Test
 	public void test_that_move_bounces_correctly_on_the_right_border() {
 		Asteroid asteroid = new Asteroid(new Point2D.Double(625, 100), 10, new Point2D.Double(10, 0));
 
 		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
 
 		assertEquals(new Point2D.Double(625, 100), asteroid.getPosition());
-	}
-
-	@Test
-	public void test_that_move_bounces_correctly_on_the_bottom_border() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(25, 305), 10, new Point2D.Double(10, 10));
-
-		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
-
-		assertEquals(new Point2D.Double(35, 305), asteroid.getPosition());
-	}
-
-	@Test
-	public void test_that_move_bounces_correctly_on_the_border_on_big_objects() {
-		Asteroid asteroid = new Asteroid(new Point2D.Double(110, 110), 100, new Point2D.Double(-30, 0));
-
-		asteroid.move(RESOLUTION, new ArrayList<SpaceObject>());
-
-		assertEquals(new Point2D.Double(120, 110), asteroid.getPosition());
 	}
 
 	@Test

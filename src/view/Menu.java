@@ -5,60 +5,97 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class Menu extends GUI{
-    public JButton startBtn;
-    public JButton loadBtn;
-    public JButton highscoreBtn;
-    public JButton settingsBtn;
-    public JButton exitBtn;
-    
-    public Menu(Dimension resolution) {
-        super("Universe - Menu", resolution);
+/**
+ * Displays the menu
+ * 
+ * @author danielschmidt
+ * 
+ */
+public class Menu extends GUI {
+	public JButton startBtn;
+	public JButton loadBtn;
+	public JButton highscoreBtn;
+	public JButton settingsBtn;
+	public JButton exitBtn;
 
-        paintArea = new GraphicPanel();
+	/**
+	 * Constructor for Menu
+	 * 
+	 * @param resolution
+	 *            the resolution of the menu
+	 */
+	public Menu(Dimension resolution) {
+		super("Universe - Menu", resolution);
 
-        GridBagLayout gbl = new GridBagLayout();
-        paintArea.setLayout(gbl);
+		paintArea = new GraphicPanel();
 
-        //Title
-        JLabel title = new JLabel("UNIVERSE");
-        title.setFont(new Font("sansserif", Font.BOLD, 42));
-        title.setForeground(Color.green);
+		GridBagLayout gbl = new GridBagLayout();
+		paintArea.setLayout(gbl);
 
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.gridwidth = GridBagConstraints.REMAINDER;
-        constraints.insets = new Insets(0, 5, 100, 5);
-        addComponent(paintArea, gbl, constraints, title);
+		// Title
+		JLabel title = new JLabel("UNIVERSE");
+		title.setFont(new Font("sansserif", Font.BOLD, 42));
+		title.setForeground(Color.green);
 
-        //Buttons
-        startBtn = createButton("Start");
-        loadBtn = createButton("Load Game");
-        highscoreBtn = createButton("Highscore");
-        settingsBtn = createButton("Settings");
-        exitBtn = createButton("Exit");
-        addButton(paintArea, gbl, startBtn);
-        addButton(paintArea, gbl, loadBtn);
-        addButton(paintArea, gbl, highscoreBtn);
-        addButton(paintArea, gbl, settingsBtn);
-        addButton(paintArea, gbl, exitBtn);
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.insets = new Insets(0, 5, 100, 5);
+		addComponent(paintArea, gbl, constraints, title);
 
-        add(paintArea);
-    }
-    
-    static void addButton(Container cont, GridBagLayout gbl, JButton btn) {
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.gridwidth = GridBagConstraints.REMAINDER;
-        constraints.insets = new Insets(0, 5, 0, 5);
-        addComponent(cont, gbl, constraints, btn);
-    }
-    
-    public void setListener(ActionListener l) {
-        this.startBtn.addActionListener(l);
-        this.loadBtn.addActionListener(l);
-        this.highscoreBtn.addActionListener(l);
-        this.settingsBtn.addActionListener(l);
-        this.exitBtn.addActionListener(l);
-    }
+		addButtons(gbl);
+
+		add(paintArea);
+	}
+
+	/**
+	 * adds Buttons to the menu
+	 * 
+	 * @param gbl
+	 *            the gridBagLayout which is used
+	 */
+	private void addButtons(GridBagLayout gbl) {
+		startBtn = createButton("Start");
+		loadBtn = createButton("Load Game");
+		highscoreBtn = createButton("Highscore");
+		settingsBtn = createButton("Settings");
+		exitBtn = createButton("Exit");
+		addButton(paintArea, gbl, startBtn);
+		addButton(paintArea, gbl, loadBtn);
+		addButton(paintArea, gbl, highscoreBtn);
+		addButton(paintArea, gbl, settingsBtn);
+		addButton(paintArea, gbl, exitBtn);
+	}
+
+	/**
+	 * adds button to the menu
+	 * 
+	 * @param cont
+	 *            container which is used
+	 * @param gbl
+	 *            the layout which is used
+	 * @param btn
+	 *            the button which should be added
+	 */
+	static void addButton(Container cont, GridBagLayout gbl, JButton btn) {
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.NONE;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.insets = new Insets(0, 5, 0, 5);
+		addComponent(cont, gbl, constraints, btn);
+	}
+
+	/**
+	 * Sets the Listeners for the menu
+	 * 
+	 * @param listener
+	 *            the listener which should be set
+	 */
+	public void setListener(ActionListener listener) {
+		this.startBtn.addActionListener(listener);
+		this.loadBtn.addActionListener(listener);
+		this.highscoreBtn.addActionListener(listener);
+		this.settingsBtn.addActionListener(listener);
+		this.exitBtn.addActionListener(listener);
+	}
 }

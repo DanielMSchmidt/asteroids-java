@@ -22,6 +22,12 @@ import javax.swing.*;
 import model.Printable;
 import model.SpaceObject;
 
+/**
+ * The GUI for the Game
+ * 
+ * @author danielschmidt
+ * 
+ */
 public class Game extends GUI {
 	BufferedImage spaceshipImg;
 	BufferedImage spaceshipMovesImg;
@@ -32,7 +38,12 @@ public class Game extends GUI {
 	BufferedImage background;
 	int shipAlignment;
 
-
+	/**
+	 * Constructor for the Gameview
+	 * 
+	 * @param resolution
+	 *            the resolution of the Gameview
+	 */
 	public Game(Dimension resolution) {
 		super("Universe - Game", resolution);
 		this.resolution = resolution;
@@ -45,24 +56,37 @@ public class Game extends GUI {
 		asteroid30Img = loadImage("/view/asteroid30.png");
 		asteroid20Img = loadImage("/view/asteroid20.png");
 		asteroid10Img = loadImage("/view/asteroid10.png");
-		shotImg = loadImage("/view/shot.png");		
+		shotImg = loadImage("/view/shot.png");
 	}
-	
-	public void printPrintables(ArrayList<Printable> list, boolean moving, int score, boolean help) {
+
+	/**
+	 * Prints all printables into a copy of the originalPicture
+	 * 
+	 * @param printables
+	 *            the ArrayList of printables, which should be printed
+	 * @param moving
+	 *            <code>true</code> if the player moves
+	 * @param score
+	 *            the current score which should be printed
+	 * @param help
+	 *            if <code>true</code> it displays the help
+	 */
+	public void printPrintables(ArrayList<Printable> printables, boolean moving, int score, boolean help) {
 		picture = copy(originalPicture);
-		for (Printable item : list) {
-			Point position = new Point((int) item.getPosition().getX() - (int) item.getSize(), (int) item.getPosition().getY() - (int) item.getSize());
+		for (Printable printable : printables) {
+			Point position = new Point((int) printable.getPosition().getX() - (int) printable.getSize(),
+			        (int) printable.getPosition().getY() - (int) printable.getSize());
 			if (picture != null) {
 				Graphics2D g = picture.createGraphics();
-				if (item.getType() == "player") {
-					shipAlignment = item.getAlignment();
+				if (printable.getType() == "player") {
+					shipAlignment = printable.getAlignment();
 					if (moving) {
 						g.drawImage(rotate(spaceshipMovesImg, shipAlignment), position.x, position.y, this);
 					} else {
 						g.drawImage(rotate(spaceshipImg, shipAlignment), position.x, position.y, this);
 					}
-				} else if (item.getType() == "asteroid") {
-					switch ((int)item.getSize()){
+				} else if (printable.getType() == "asteroid") {
+					switch ((int) printable.getSize()) {
 						case 30:
 							g.drawImage(asteroid30Img, position.x, position.y, this);
 						case 20:
@@ -71,35 +95,46 @@ public class Game extends GUI {
 							g.drawImage(asteroid10Img, position.x, position.y, this);
 					}
 				} else {
-					g.drawImage(rotate(shotImg, item.getAlignment()), position.x-8, position.y-8, this);
+					g.drawImage(rotate(shotImg, printable.getAlignment()), position.x - 8, position.y - 8, this);
 				}
 				g.setFont(new Font("sansserif", Font.BOLD, 14));
 				g.setColor(Color.green);
 				g.drawString("Help - F1", 10, 20);
-				g.drawString("Points: " + score, resolution.width-100, 20);
-			}			
+				g.drawString("Points: " + score, resolution.width - 100, 20);
+			}
 		}
-		if (help){
+		if (help) {
 			displayHelp();
 		}
 		paintArea.repaint();
 	}
 
-	public static BufferedImage rotate(BufferedImage img, int alignment) {
-		int w = img.getWidth();
-		int h = img.getHeight();
+	/**
+	 * rotates an image
+	 * 
+	 * @param image
+	 *            the image which should be rotated
+	 * @param angle
+	 *            the rotationangle
+	 * @return a rotated image
+	 */
+	public static BufferedImage rotate(BufferedImage image, int angle) {
+		int w = image.getWidth();
+		int h = image.getHeight();
 
-		BufferedImage newImage = new BufferedImage(w, h, img.getType());
+		BufferedImage newImage = new BufferedImage(w, h, image.getType());
 		Graphics2D g2 = newImage.createGraphics();
-		g2.rotate(Math.toRadians(alignment), w / 2, h / 2); // w/2 und h/2
-		                                                     // wegen drehpunkt
-		g2.drawImage(img, null, 0, 0);
+		g2.rotate(Math.toRadians(angle), w / 2, h / 2); // w/2 und h/2
+		                                                // wegen drehpunkt
+		g2.drawImage(image, null, 0, 0);
 
 		return newImage;
 	}
-	
-	
-	public void displayHelp(){
+
+	/**
+	 * displays the helpoutput
+	 */
+	public void displayHelp() {
 		if (picture != null) {
 			Graphics2D g = picture.createGraphics();
 			g.setFont(new Font("sansserif", Font.BOLD, 14));
@@ -112,19 +147,28 @@ public class Game extends GUI {
 		}
 	}
 
+	/**
+	 * prints the output, which shows that the Game is over
+	 */
 	public void gameover() {
 		if (picture != null) {
 			Graphics2D g = picture.createGraphics();
 			g.setColor(Color.red);
 			g.setFont(new Font("sansserif", Font.BOLD, 34));
-			g.drawString("GAME OVER!", resolution.width/2-100, resolution.height/2);
+			g.drawString("GAME OVER!", resolution.width / 2 - 100, resolution.height / 2);
 			g.setFont(new Font("sansserif", Font.BOLD, 20));
-			g.drawString("Press ESC", resolution.width/2-35, resolution.height/2 + 40);
+			g.drawString("Press ESC", resolution.width / 2 - 35, resolution.height / 2 + 40);
 		}
 		paintArea.repaint();
 	}
 
-	public void setKeyListener(KeyListener l) {
-		this.addKeyListener(l);
+	/**
+	 * adds a keylistener to this view
+	 * 
+	 * @param listener
+	 *            the keylistener which should be added
+	 */
+	public void setKeyListener(KeyListener listener) {
+		this.addKeyListener(listener);
 	}
 }

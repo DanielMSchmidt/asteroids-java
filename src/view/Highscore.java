@@ -4,6 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Displays the highscore
+ * 
+ * @author danielschmidt
+ * 
+ */
 public class Highscore extends GUI {
 
 	public JButton backBtn;
@@ -11,6 +17,14 @@ public class Highscore extends GUI {
 	String[] title = { "Score", "Player" };
 	JTable scoreTable;
 
+	/**
+	 * Constructor for the Highscoreview
+	 * 
+	 * @param scores
+	 *            the scores which should be displayed
+	 * @param resolution
+	 *            the resolution of the view
+	 */
 	public Highscore(String[][] scores, Dimension resolution) {
 		super("Universe - Highscore", resolution);
 		paintArea = new GraphicPanel();
@@ -35,14 +49,26 @@ public class Highscore extends GUI {
 		add(paintArea);
 	}
 
+	/**
+	 * refreshes the scores in the view
+	 * 
+	 * @param scores
+	 *            the scores which should be updated
+	 */
 	public void refreshScores(String[][] scores) {
 		scoreTable = new JTable(scores, title);
 		this.update(getGraphics());
 		repaint();
 	}
 
-	public void setListener(ActionListener l) {
-		this.resetBtn.addActionListener(l);
-		this.backBtn.addActionListener(l);
+	/**
+	 * sets the listener
+	 * 
+	 * @param listener
+	 *            listener which should be set
+	 */
+	public void setListener(ActionListener listener) {
+		this.resetBtn.addActionListener(listener);
+		this.backBtn.addActionListener(listener);
 	}
 }

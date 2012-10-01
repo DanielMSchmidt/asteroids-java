@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * 
  */
 @SuppressWarnings("serial")
-public abstract class SpaceObject implements Serializable{
+public abstract class SpaceObject implements Serializable {
 	Point2D position;
 	float size;
 	Point2D direction;
@@ -157,55 +157,26 @@ public abstract class SpaceObject implements Serializable{
 	 *            The resolution of the enviroment the SpaceObject is in
 	 */
 	public void bounceWithWall(Dimension resolution) {
-		// TODO Ugly code, but no other possibility seen
 		if (shouldBounceWithWall) {
 			ArrayList<Boolean> borders = getBorders(resolution);
-			int leftOrRightSide = 0;
-			int topOrBottomSide = 0;
 			for (int i = 0; i < borders.size(); i++) {
 				if (borders.get(i)) {
 					switch (i) {
 						case 0:
-							this.position.setLocation(this.position.getX(),
-							        Math.abs((this.position.getY() - this.size + this.direction.getY())) + this.size);
 							this.direction.setLocation(this.direction.getX(), Math.abs(this.direction.getY()));
-
-							topOrBottomSide++;
 						break;
 						case 1:
-							this.position.setLocation(resolution.width
-							        - (resolution.width - (this.position.getX() + this.direction.getX() - this.size)),
-							        this.position.getY());
-							this.direction.setLocation(-1 * Math.abs(this.direction.getX()), this.direction.getY());
-
-							leftOrRightSide++;
+							this.direction.setLocation(-Math.abs(this.direction.getX()), this.direction.getY());
 						break;
 						case 2:
-							this.position.setLocation(this.position.getX(), resolution.height
-							        - (resolution.height - (this.position.getY() + this.direction.getY() - this.size)));
-							this.direction.setLocation(this.direction.getX(), -1 * Math.abs(this.direction.getY()));
-
-							topOrBottomSide++;
+							this.direction.setLocation(this.direction.getX(), -Math.abs(this.direction.getY()));
 						break;
 						case 3:
-							this.position.setLocation(
-							        Math.abs(this.position.getX() - this.size + this.direction.getX()) + this.size,
-							        this.position.getY());
 							this.direction.setLocation(Math.abs(this.direction.getX()), this.direction.getY());
-
-							leftOrRightSide++;
+						default:
 						break;
 					}
-
 				}
-			}
-
-			if (leftOrRightSide > 1 || topOrBottomSide > 1) {
-				throw new RuntimeException("Impossible bounce detected");
-			} else if (leftOrRightSide == 1 && topOrBottomSide == 0) {
-				this.position.setLocation(this.position.getX(), this.position.getY() + this.direction.getY());
-			} else if (leftOrRightSide == 0 && topOrBottomSide == 1) {
-				this.position.setLocation(this.position.getX() + this.direction.getX(), this.position.getY());
 			}
 		}
 	}
@@ -293,19 +264,41 @@ public abstract class SpaceObject implements Serializable{
 	 */
 	public abstract int getPoints();
 
+	/**
+	 * getter for the direction of the object
+	 * 
+	 * @return the direction of the object
+	 */
 	public Point2D getDirection() {
 		return direction;
 	}
 
+	/**
+	 * setter for the direction of the object
+	 * 
+	 * @param direction
+	 *            the direction of the object
+	 * @return the SpaceObject for chaining
+	 */
 	public SpaceObject setDirection(Point2D direction) {
 		this.direction = direction;
 		return this;
 	}
 
+	/**
+	 * getter for the position of the object
+	 * 
+	 * @return the position of the object
+	 */
 	public Point2D getPosition() {
 		return position;
 	}
 
+	/**
+	 * getter for the size of the object
+	 * 
+	 * @return the size of the object
+	 */
 	public float getSize() {
 		return size;
 	}

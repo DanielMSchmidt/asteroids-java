@@ -321,24 +321,4 @@ public class ReaderTest {
         
 		
 	}
-	
-	@Test
-	public void test_that_game_reader_saves_a_game_with_objects(){
-		Game game = new Game("test", new Dimension(100,100), 10, 1);
-		game.run(0, false, false);
-		
-		gameReader.saveGame(game);
-		try {
-			Game loadedGame = gameReader.loadGame();
-			
-			assertEquals(loadedGame.getPlayername(), game.getPlayername());
-			assertEquals(loadedGame.getAsteroidCount(), game.getAsteroidCount());
-			assertEquals(loadedGame.getTotalPoints(), game.getTotalPoints());
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			fail("No Game found!");
-		}
-		
-	}
 }

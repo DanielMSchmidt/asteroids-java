@@ -30,17 +30,17 @@ public class GameTest {
 	}
 
 	@Test
-	public void test_that_at_level_one_there_are_two_asteroids() {
+	public void test_that_at_level_one_there_is_one_asteroids() {
 		game.objects = new ArrayList<SpaceObject>();
 		assertEquals(0, game.level);
 		game.nextLevel();
 
 		assertEquals(1, game.level);
-		assertEquals(2, game.objects.size());
+		assertEquals(1, game.objects.size());
 	}
 
 	@Test
-	public void test_that_at_level_two_there_are_four_asteroids() {
+	public void test_that_at_level_two_there_are_two_asteroids() {
 		game.nextLevel();
 		game.objects = new ArrayList<SpaceObject>();
 
@@ -48,14 +48,14 @@ public class GameTest {
 		game.nextLevel();
 
 		assertEquals(2, game.level);
-		assertEquals(4, game.objects.size());
+		assertEquals(2, game.objects.size());
 	}
 
 	@Test
 	public void test_that_two_generated_asteroids_dont_collide() {
 		assertEquals(0, game.level);
-		game.nextLevel();
-		assertEquals(1, game.level);
+		game.setLevel(2);
+		assertEquals(2, game.level);
 
 		assertFalse(game.objects.get(0).overlap(game.objects.get(1)));
 	}
@@ -67,7 +67,6 @@ public class GameTest {
 		game.nextLevel();
 		assertEquals(1, game.level);
 
-		assertEquals(2, game.objects.size());
 		assertEquals(2, game.getTotalPoints());
 	}
 
@@ -78,19 +77,17 @@ public class GameTest {
 		game.setLevel(2);
 		assertEquals(2, game.level);
 
-		assertEquals(4, game.objects.size());
 		assertEquals(4, game.getTotalPoints());
 	}
 
 	@Test
-	public void test_that_at_level_three_eight_points_are_to_be_gained() {
+	public void test_that_at_level_three_six_points_are_to_be_gained() {
 		assertEquals(0, game.level);
 		game.objects = new ArrayList<SpaceObject>();
 		game.setLevel(3);
 		assertEquals(3, game.level);
 
-		assertEquals(6, game.objects.size());
-		assertEquals(8, game.getTotalPoints());
+		assertEquals(6, game.getTotalPoints());
 	}
 
 	@Test
@@ -325,7 +322,7 @@ public class GameTest {
 		game.objects = new ArrayList<SpaceObject>();
 		game.player.setAlignment(0);
 		game.player.position = new Point2D.Double(100, 100);
-		Point2D expectedPosition = new Point2D.Double(100, 80);
+		Point2D expectedPosition = new Point2D.Double(100, 70);
 
 		game.launchAShot();
 		SpaceObject object = game.objects.get(0);
@@ -338,7 +335,7 @@ public class GameTest {
 		game.objects = new ArrayList<SpaceObject>();
 		game.player.setAlignment(90);
 		game.player.position = new Point2D.Double(100, 100);
-		Point2D expectedPosition = new Point2D.Double(120, 100);
+		Point2D expectedPosition = new Point2D.Double(130, 100);
 
 		game.launchAShot();
 		SpaceObject object = game.objects.get(0);
@@ -351,7 +348,7 @@ public class GameTest {
 		game.objects = new ArrayList<SpaceObject>();
 		game.player.setAlignment(180);
 		game.player.position = new Point2D.Double(100, 100);
-		Point2D expectedPosition = new Point2D.Double(100, 120);
+		Point2D expectedPosition = new Point2D.Double(100, 130);
 
 		game.launchAShot();
 		SpaceObject object = game.objects.get(0);
@@ -364,7 +361,7 @@ public class GameTest {
 		game.objects = new ArrayList<SpaceObject>();
 		game.player.setAlignment(270);
 		game.player.position = new Point2D.Double(100, 100);
-		Point2D expectedPosition = new Point2D.Double(80, 100);
+		Point2D expectedPosition = new Point2D.Double(70, 100);
 
 		game.launchAShot();
 		SpaceObject object = game.objects.get(0);
@@ -400,8 +397,8 @@ public class GameTest {
 	}
 
 	@Test
-	public void test_that_run_with_shot_generates_a_shot() {
-		game.run(0, false, false);
+	public void test_that_run_with_shot_generates_a_shot() {		
+		game.setLevel(2);
 		int oldObjectsCount = game.objects.size();
 		game.objects.get(0).position = new Point2D.Double(100, 100);
 		game.objects.get(1).position = new Point2D.Double(500, 500);
