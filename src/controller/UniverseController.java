@@ -13,6 +13,8 @@ import utilities.OptionsReader;
 import view.*;
 
 public class UniverseController {
+	public static final Dimension RESOLUTION = new Dimension(800, 600);
+
 	/**
 	 * @param gView
 	 * @param gModel
@@ -54,7 +56,7 @@ public class UniverseController {
 		String playername = oReader.getPlayerName();
 		int speed = oReader.getSpeed();
 		int level = oReader.getStartLevel();
-		this.gModel = new model.Game(playername, new Dimension(800, 600), speed, level);
+		this.gModel = new model.Game(playername, RESOLUTION, speed, level);
 		this.gView = new view.Game(gModel.getResolution());
 		this.gView.setKeyListener(new GameListener());
 	}
@@ -220,7 +222,7 @@ public class UniverseController {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				changeWindow(mView, gView);
 				if (gameEnd){
-					Game game = new Game(oReader.getPlayerName(), new Dimension(800, 600));
+					Game game = new Game(oReader.getPlayerName(), RESOLUTION);
 					gReader.saveGame(game);
 				}else{
 					gReader.saveGame(gModel);					
