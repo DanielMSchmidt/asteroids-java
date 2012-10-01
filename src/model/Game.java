@@ -3,8 +3,9 @@ package model;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Game {
+public class Game implements Serializable{
 
 	protected int SHOT_SPEED;
 	protected int PLAYER_SPEED;

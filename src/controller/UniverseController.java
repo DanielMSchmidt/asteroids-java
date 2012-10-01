@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import model.*;
+import model.Game;
 import utilities.GameReader;
 import utilities.OptionsReader;
 import view.*;
@@ -95,11 +96,15 @@ public class UniverseController {
 
 	private void reloadGame() {
 		try {
-	        gModel = gReader.loadGame();
-        }
-        catch (IOException e) {
-	        constructGame();
-        }
+			gModel = gReader.loadGame();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			constructGame();
+		}
+		finally {
+			startGame();
+		}
 	}
 
 	class Task extends TimerTask {
@@ -118,7 +123,6 @@ public class UniverseController {
 		private void endGame() {
 			hModel.addScore(gModel.getPlayername(), gModel.getScore());
 			gView.gameover();
-			gReader.deleteFile();
 			this.cancel();
 		}
 
@@ -153,8 +157,8 @@ public class UniverseController {
 				changeWindow(gView, mView);
 				startGame();
 			} else if (source == mView.loadBtn) {
-				changeWindow(gView, mView);
 				reloadGame();
+				changeWindow(gView, mView);
 			} else if (source == mView.highscoreBtn) {
 				constructHighscore();
 				changeWindow(hView, mView);
@@ -215,7 +219,12 @@ public class UniverseController {
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				changeWindow(mView, gView);
-				gReader.saveGame(gModel);
+				if (gameEnd){
+					Game game = new Game(oReader.getPlayerName(), new Dimension(800, 600));
+					gReader.saveGame(game);
+				}else{
+					gReader.saveGame(gModel);					
+				}
 				timer.cancel();
 			}
 			if (e.getKeyCode() == KeyEvent.VK_F1) {

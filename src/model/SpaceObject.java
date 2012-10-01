@@ -3,6 +3,7 @@ package model;
 import java.awt.Dimension;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * @author danielschmidt
  * 
  */
-public abstract class SpaceObject {
+public abstract class SpaceObject implements Serializable{
 	Point2D position;
 	float size;
 	Point2D direction;

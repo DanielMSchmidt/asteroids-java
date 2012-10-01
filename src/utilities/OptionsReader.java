@@ -122,8 +122,7 @@ public class OptionsReader extends Reader {
 	 * @return the saved playername
 	 */
 	public String getPlayerName() {
-		String a = readData().get(0);
-		return a;
+		return readData().get(0);
 	}
 
 	/**

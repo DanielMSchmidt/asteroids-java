@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Shot extends SpaceObject {
 	int alignment;
-	
+
 	protected Shot(Point2D position, Point2D direction) {
 		super(position, 8);
 		this.direction = direction;
@@ -15,9 +15,9 @@ public class Shot extends SpaceObject {
 
 	public Shot(Point2D position, int shotSpeed, int alignment, Dimension resolution) {
 		super(new Point2D.Double(position.getX(), position.getY()), 5);
-		this.direction = transformVektorViaAngle(new Point2D.Double(0, -shotSpeed),
-				alignment);
+		this.direction = transformVektorViaAngle(new Point2D.Double(0, -shotSpeed), alignment);
 		this.alignment = alignment;
+		// FIXME don't do moves
 		this.move(resolution, new ArrayList<SpaceObject>());
 		this.move(resolution, new ArrayList<SpaceObject>());
 	}
@@ -37,13 +37,13 @@ public class Shot extends SpaceObject {
 	}
 
 	@Override
-    public boolean shouldBeDeletedIfOverlaps(ArrayList<SpaceObject> overlappingObjects) {
+	public boolean shouldBeDeletedIfOverlaps(ArrayList<SpaceObject> overlappingObjects) {
 		return classIsInList("model.Asteroid", overlappingObjects) || classIsInList("model.Shot", overlappingObjects);
-    }
+	}
 
 	@Override
-    public boolean shouldBeDeletedAsItCrashsWithWall(Dimension resolution) {
+	public boolean shouldBeDeletedAsItCrashsWithWall(Dimension resolution) {
 		return this.getBorders(resolution).contains(true);
-    }
+	}
 
 }

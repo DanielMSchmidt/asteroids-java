@@ -15,39 +15,42 @@ public class GameReader extends Reader {
 	}
 
 	public GameReader() {
-		super("game.txt");
+		super("game");
 	}
 
 	public boolean saveGame(Game game) {
 		try {
-			FileOutputStream fileOut = new FileOutputStream(defaultDataName);
+			FileOutputStream fileOut = new FileOutputStream(defaultDataName+".ser");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			
 			out.writeObject(game);
+			
 			out.close();
 			fileOut.close();
 			return true;
 		}
 		catch (IOException i) {
+			i.printStackTrace();
 			return false;
 		}
 
 	}
 
 	public Game loadGame() throws IOException {
-		if (readRawData(defaultDataName) == "") throw new IOException("Data was deleted");
-
+		Game game = null;
 		try {
-			FileInputStream fileIn = new FileInputStream(defaultDataName);
+			FileInputStream fileIn = new FileInputStream(defaultDataName+".ser");
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 
-			Game game = (Game) in.readObject();
+			game = (Game) in.readObject();
 
 			in.close();
 			fileIn.close();
-			return game;
 		}
 		catch (ClassNotFoundException e) {
+			e.printStackTrace();
 			throw new IOException("Class not Found: " + e.getMessage());
 		}
+		return game;
 	}
 }
