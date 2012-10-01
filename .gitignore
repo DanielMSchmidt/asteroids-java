@@ -25,3 +25,6 @@ local.properties
 /*.txt
 /Test
 /TestHighscore
+Testsavegame
+Testsavegame.ser
+game.ser
