@@ -106,8 +106,8 @@ public class OptionsReader extends Reader {
 	void initialize() {
 		ArrayList<String> input = new ArrayList<String>();
 		input.add("Player 1");
-		input.add("5");
 		input.add("1");
+		input.add("5");
 		try {
 			save(input);
 		}
