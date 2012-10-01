@@ -221,11 +221,12 @@ public class UniverseController {
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				changeWindow(mView, gView);
-				if (gameEnd){
-					Game game = new Game(oReader.getPlayerName(), RESOLUTION);
+				if (gameEnd) {
+					Game game = new Game(oReader.getPlayerName(), RESOLUTION, oReader.getSpeed(),
+					        oReader.getStartLevel());
 					gReader.saveGame(game);
-				}else{
-					gReader.saveGame(gModel);					
+				} else {
+					gReader.saveGame(gModel);
 				}
 				timer.cancel();
 			}

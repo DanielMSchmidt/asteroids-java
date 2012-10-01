@@ -12,8 +12,7 @@ public class Asteroid extends SpaceObject {
 	 * @see SpaceObject
 	 */
 	protected Asteroid(Point2D position, float size, Point2D direction) {
-		super(position, size);
-		this.direction = direction;
+		super(position, direction, size);
 	}
 
 	public int getPoints() {

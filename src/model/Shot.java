@@ -9,17 +9,18 @@ public class Shot extends SpaceObject {
 	int alignment;
 
 	protected Shot(Point2D position, Point2D direction) {
-		super(position, 8);
+		super(position, direction, 8);
 		this.direction = direction;
 	}
 
 	public Shot(Point2D position, int shotSpeed, int alignment, Dimension resolution) {
-		super(new Point2D.Double(position.getX(), position.getY()), 5);
-		this.direction = transformVektorViaAngle(new Point2D.Double(0, -shotSpeed), alignment);
+		super(new Point2D.Double(position.getX(), position.getY()), transformVektorViaAngle(new Point2D.Double(0,
+		        -shotSpeed), alignment), 5);
 		this.alignment = alignment;
 		// FIXME don't do moves
-		this.move(resolution, new ArrayList<SpaceObject>());
-		this.move(resolution, new ArrayList<SpaceObject>());
+
+		Point2D range = transformVektorViaAngle(new Point2D.Double(0, -30), alignment);
+		this.position = new Point2D.Double(position.getX() + range.getX(), position.getY() + range.getY());
 	}
 
 	public Printable getPrintable() {

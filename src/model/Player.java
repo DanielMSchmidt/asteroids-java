@@ -15,11 +15,9 @@ public class Player extends SpaceObject {
 	 * @param score
 	 */
 	protected Player(String name, Point2D position) {
-		super(position, 20);
+		super(position,new Point2D.Double(0, -5), 20);
 		this.name = name;
 		this.score = 0;
-		this.direction = new Point2D.Double();
-		this.direction.setLocation(0, -5);
 		this.alignment = 0;
 		this.shouldBounceWithWall = false;
 	}

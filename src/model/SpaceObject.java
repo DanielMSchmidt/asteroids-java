@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * @author danielschmidt
  * 
  */
+@SuppressWarnings("serial")
 public abstract class SpaceObject implements Serializable{
 	Point2D position;
 	float size;
@@ -28,11 +29,11 @@ public abstract class SpaceObject implements Serializable{
 	 * @param size
 	 *            The size of the SpaceObject
 	 */
-	protected SpaceObject(Point2D position, float size) {
-		// FIXME Add direction to constructor
+	protected SpaceObject(Point2D position, Point2D direction, float size) {
 		super();
 		this.position = position;
 		this.size = size;
+		this.direction = direction;
 	}
 
 	/**
