@@ -17,8 +17,7 @@ public class Shot extends SpaceObject {
 		super(new Point2D.Double(position.getX(), position.getY()), transformVektorViaAngle(new Point2D.Double(0,
 		        -shotSpeed), alignment), 5);
 		this.alignment = alignment;
-		// FIXME don't do moves
-
+		
 		Point2D range = transformVektorViaAngle(new Point2D.Double(0, -30), alignment);
 		this.position = new Point2D.Double(position.getX() + range.getX(), position.getY() + range.getY());
 	}
