@@ -323,6 +323,15 @@ public class UniverseController {
 						fast = true;
 					default:
 					break;
+					case KeyEvent.VK_UP:
+						forward = true;
+					break;
+					case KeyEvent.VK_LEFT:
+						left = true;
+					break;
+					case KeyEvent.VK_RIGHT:
+						right = true;
+					break;
 				}
 			}
 		}
@@ -349,6 +358,15 @@ public class UniverseController {
 					case KeyEvent.VK_SPACE:
 						shot = true;
 					default:
+					break;
+					case KeyEvent.VK_UP:
+						forward = false;
+					break;
+					case KeyEvent.VK_LEFT:
+						left = false;
+					break;
+					case KeyEvent.VK_RIGHT:
+						right = false;
 					break;
 				}
 			}

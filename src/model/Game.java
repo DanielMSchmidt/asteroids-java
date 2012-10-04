@@ -14,7 +14,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Game implements Serializable {
 
-	private static final float GENERATIONRADIUS = 100;
+	private static final float GENERATIONRADIUS = 300;
 	protected int SHOT_SPEED;
 	protected int PLAYER_SPEED;
 	Player player;
